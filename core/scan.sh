@@ -519,13 +519,13 @@ is_excluded_file() {
 
 # Get list of source files
 walk_files() {
-    # Build find command exclusions
+    # Build find command exclusions - use -path for proper nested directory matching
     local find_excludes=""
     for dir in $EXCLUDE_DIRS; do
-        find_excludes="$find_excludes -name '$dir' -prune -o"
+        find_excludes="$find_excludes -path '*/$dir' -prune -o -path './$dir' -prune -o"
     done
-    
-    # Find all files
+
+    # Find all files (prune excluded dirs, then print files)
     eval "find . $find_excludes -type f -print" 2>/dev/null | sort | while read -r file; do
         # Strip ./ prefix
         file="${file#./}"
