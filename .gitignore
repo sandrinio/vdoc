@@ -1,0 +1,34 @@
+# vdoc - Git Ignore
+
+# Platform-specific instruction files (regenerated per user)
+.cursor/rules/vdoc.md
+.windsurfrules
+.aider.conf.yml
+.continue/
+
+# Claude Code skill (user-specific location)
+# ~/.claude/skills/vdoc/SKILL.md
+
+# Scan output (ephemeral)
+.vdoc-scan-output
+
+# Lock file (ephemeral)
+.vdoc.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Dependencies (if any test tooling added)
+node_modules/

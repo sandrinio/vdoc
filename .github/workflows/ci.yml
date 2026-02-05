@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+      
+      - name: Run shellcheck on core scripts
+        run: |
+          shellcheck core/scan.sh
+          shellcheck install.sh
+          shellcheck adapters/*/generate.sh
+
+  test:
+    name: Bats Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install bats-core
+        run: |
+          git clone https://github.com/bats-core/bats-core.git
+          cd bats-core
+          sudo ./install.sh /usr/local
+      
+      - name: Run tests
+        run: bats tests/*.bats
+
+  validate-presets:
+    name: Validate Presets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check preset syntax
+        run: |
+          for preset in core/presets/*.conf; do
+            echo "Validating $preset..."
+            # Source the preset to check for syntax errors
+            bash -n "$preset" || exit 1
+            # Check required variables are defined
+            source "$preset"
+            [[ -n "${PRESET_NAME:-}" ]] || { echo "Missing PRESET_NAME in $preset"; exit 1; }
+            [[ -n "${EXCLUDE_DIRS:-}" ]] || { echo "Missing EXCLUDE_DIRS in $preset"; exit 1; }
+            [[ -n "${DOC_SIGNALS:-}" ]] || { echo "Missing DOC_SIGNALS in $preset"; exit 1; }
+            echo "  ✓ Valid"
+          done

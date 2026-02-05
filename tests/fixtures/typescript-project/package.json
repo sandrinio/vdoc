@@ -1,0 +1,9 @@
+{
+  "name": "test-typescript-project",
+  "version": "1.0.0",
+  "description": "Test fixture for vdoc TypeScript scanning",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  }
+}
