@@ -29,8 +29,19 @@ FORCE_LOCK=false
 SKIP_LOCK=false
 FORCE_FULL_SCAN=false  # STORY-051: Force full scan even with valid last_commit
 SKIP_QUALITY=false     # STORY-062: Skip quality metrics calculation
+BENCHMARK=false        # Timing benchmarks for performance analysis
+FAST_MODE=false        # STORY-086: Skip hashing/docstrings for fast init
 MANIFEST_PATH="./vdocs/_manifest.json"
 PRESET_OVERRIDE=""
+
+# Timing variables (for benchmark mode)
+TIME_WALK=0
+TIME_PROCESS=0
+TIME_HASH=0
+TIME_CATEGORIZE=0
+TIME_DOCSTRING=0
+TIME_MANIFEST=0
+TIME_QUALITY=0
 
 # Source lock module (STORY-055, STORY-056)
 if [[ -f "${SCRIPT_DIR}/lock.sh" ]]; then
@@ -93,6 +104,22 @@ log_verbose() {
 
 log_error() {
     echo "# [error] $1" >&2
+}
+
+# Timing utility for benchmarks (returns milliseconds since epoch)
+get_time_ms() {
+    if [[ "$(uname)" == "Darwin" ]]; then
+        # macOS: use python for millisecond precision
+        python3 -c 'import time; print(int(time.time() * 1000))' 2>/dev/null || date +%s000
+    else
+        # Linux: date supports nanoseconds
+        echo $(($(date +%s%N) / 1000000))
+    fi
+}
+
+log_benchmark() {
+    $BENCHMARK && echo "⏱  $1" >&2
+    return 0
 }
 
 # =============================================================================
@@ -376,15 +403,25 @@ match_glob() {
 # Categorize a file based on DOC_SIGNALS
 categorize_file() {
     local file="$1"
-    
+    local start_time=0
+
+    $BENCHMARK && start_time=$(get_time_ms)
+
+    local result="other"
     for i in "${!SIGNAL_PATTERNS[@]}"; do
         if match_glob "$file" "${SIGNAL_PATTERNS[$i]}"; then
-            echo "${SIGNAL_CATEGORIES[$i]}"
-            return
+            result="${SIGNAL_CATEGORIES[$i]}"
+            break
         fi
     done
-    
-    echo "other"
+
+    if $BENCHMARK; then
+        local end_time
+        end_time=$(get_time_ms)
+        TIME_CATEGORIZE=$((TIME_CATEGORIZE + end_time - start_time))
+    fi
+
+    echo "$result"
 }
 
 # =============================================================================
@@ -395,7 +432,10 @@ categorize_file() {
 compute_hash() {
     local file="$1"
     local hash=""
-    
+    local start_time=0
+
+    $BENCHMARK && start_time=$(get_time_ms)
+
     if command -v shasum &>/dev/null; then
         hash=$(shasum -a 256 "$file" 2>/dev/null | cut -d' ' -f1)
     elif command -v sha256sum &>/dev/null; then
@@ -410,7 +450,13 @@ compute_hash() {
             hash=$(cksum "$file" 2>/dev/null | awk '{print $1}')
         fi
     fi
-    
+
+    if $BENCHMARK; then
+        local end_time
+        end_time=$(get_time_ms)
+        TIME_HASH=$((TIME_HASH + end_time - start_time))
+    fi
+
     # Truncate to 10 characters
     echo "${hash:0:10}"
 }
@@ -423,7 +469,10 @@ compute_hash() {
 extract_docstring() {
     local file="$1"
     local docstring=""
-    
+    local start_time=0
+
+    $BENCHMARK && start_time=$(get_time_ms)
+
     # Read first 50 lines
     local content
     content=$(head -50 "$file" 2>/dev/null) || return
@@ -486,7 +535,13 @@ extract_docstring() {
     
     # Escape pipe characters for output format
     docstring=$(echo "$docstring" | sed 's/|/\\|/g')
-    
+
+    if $BENCHMARK; then
+        local end_time
+        end_time=$(get_time_ms)
+        TIME_DOCSTRING=$((TIME_DOCSTRING + end_time - start_time))
+    fi
+
     echo "$docstring"
 }
 
@@ -517,39 +572,89 @@ is_excluded_file() {
     return 1
 }
 
-# Get list of source files
+# Binary file extensions to skip (fast check instead of `file` command)
+BINARY_EXTENSIONS="png jpg jpeg gif ico svg webp mp3 mp4 wav avi mov mkv pdf zip tar gz bz2 xz 7z rar exe dll so dylib a o wasm ttf otf woff woff2 eot"
+
+is_binary_extension() {
+    local ext="${1##*.}"
+    # Lowercase (bash 3.2 compatible)
+    ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+    [[ " $BINARY_EXTENSIONS " == *" $ext "* ]]
+}
+
+# Get list of source files - uses git ls-files if available (instant), falls back to fd/find
 walk_files() {
-    # Build find command exclusions - use -path for proper nested directory matching
+    local files=""
+
+    # Strategy 1: git ls-files (fastest - reads from index, respects .gitignore)
+    if command -v git &>/dev/null && git rev-parse --git-dir &>/dev/null 2>&1; then
+        log_verbose "Using git ls-files for file discovery"
+        files=$(git ls-files --cached --others --exclude-standard 2>/dev/null)
+
+        if [[ -n "$files" ]]; then
+            echo "$files" | while read -r file; do
+                [[ -z "$file" ]] && continue
+                [[ ! -f "$file" ]] && continue
+
+                # Skip excluded dirs (for uncommitted files not in .gitignore)
+                is_excluded_dir "./$file" && continue
+
+                # Skip binary extensions
+                is_binary_extension "$file" && continue
+
+                # Skip hidden files
+                local filename
+                filename=$(basename "$file")
+                [[ "$filename" == .* ]] && continue
+
+                echo "$file"
+            done
+            return
+        fi
+    fi
+
+    # Strategy 2: fd (fast - parallel, respects .gitignore)
+    if command -v fd &>/dev/null; then
+        log_verbose "Using fd for file discovery"
+        fd --type f --hidden --no-ignore-vcs 2>/dev/null | while read -r file; do
+            [[ -z "$file" ]] && continue
+
+            is_excluded_dir "./$file" && continue
+            is_binary_extension "$file" && continue
+
+            local filename
+            filename=$(basename "$file")
+            [[ "$filename" == .* ]] && continue
+
+            echo "$file"
+        done
+        return
+    fi
+
+    # Strategy 3: find (fallback)
+    log_verbose "Using find for file discovery"
+
+    # Build find exclusions
     local find_excludes=""
     for dir in $EXCLUDE_DIRS; do
         find_excludes="$find_excludes -path '*/$dir' -prune -o -path './$dir' -prune -o"
     done
 
-    # Find all files (prune excluded dirs, then print files)
-    eval "find . $find_excludes -type f -print" 2>/dev/null | sort | while read -r file; do
-        # Strip ./ prefix
+    eval "find . $find_excludes -type f -print" 2>/dev/null | while read -r file; do
         file="${file#./}"
-        
-        # Skip if in excluded directory (double check)
+        [[ -z "$file" ]] && continue
+
         is_excluded_dir "./$file" && continue
-        
-        # Skip if matches excluded file pattern
+
         local filename
         filename=$(basename "$file")
         is_excluded_file "$filename" && continue
-        
-        # Skip hidden files/directories
+
         [[ "$file" == .* ]] && continue
         [[ "$filename" == .* ]] && continue
-        
-        # Skip binary files (check first few bytes)
-        # Note: "executable" alone matches scripts, so be more specific
-        local file_type
-        file_type=$(file "$file" 2>/dev/null)
-        if echo "$file_type" | grep -qE 'binary|ELF|Mach-O|image data|archive|compressed'; then
-            continue
-        fi
-        
+
+        is_binary_extension "$file" && continue
+
         echo "$file"
     done
 }
@@ -557,16 +662,26 @@ walk_files() {
 # Process a single file
 process_file() {
     local file="$1"
-    
-    local hash
-    hash=$(compute_hash "$file")
-    
+
+    # STORY-086: Fast mode skips ALL expensive operations for instant init
+    # - No hashing (subprocess per file)
+    # - No docstring extraction (subprocess per file)
+    # - No categorization (regex matching per file)
+    # Just output file path with placeholder values
+    if $FAST_MODE; then
+        echo "$file | other | null | "
+        return
+    fi
+
     local category
     category=$(categorize_file "$file")
-    
+
+    local hash
+    hash=$(compute_hash "$file")
+
     local docstring
     docstring=$(extract_docstring "$file")
-    
+
     echo "$file | $category | $hash | $docstring"
 }
 
@@ -679,7 +794,9 @@ Options:
     --force                 Override existing lock (use with caution)
     --no-lock               Skip lock acquisition (for read-only scans)
     --full                  Force full scan (ignore incremental optimization)
+    --fast                  Fast mode: skip hashing and docstrings (for quick init)
     --skip-quality          Skip quality metrics calculation
+    --benchmark             Show timing breakdown for performance analysis
 
 Output format (pipe-delimited):
     path | category | hash | docstring
@@ -746,6 +863,15 @@ main() {
                 ;;
             --skip-quality)
                 SKIP_QUALITY=true
+                shift
+                ;;
+            --benchmark)
+                BENCHMARK=true
+                VERBOSE=true
+                shift
+                ;;
+            --fast)
+                FAST_MODE=true
                 shift
                 ;;
             *)
@@ -833,8 +959,18 @@ main() {
 
     # Collect files
     log_verbose "Walking directory tree..."
+    local walk_start
+    $BENCHMARK && walk_start=$(get_time_ms)
+
     local files
     files=$(walk_files)
+
+    if $BENCHMARK; then
+        local walk_end
+        walk_end=$(get_time_ms)
+        TIME_WALK=$((walk_end - walk_start))
+        log_benchmark "File discovery: ${TIME_WALK}ms"
+    fi
 
     local total_file_count
     total_file_count=$(echo "$files" | grep -c . 2>/dev/null || echo 0)
@@ -993,6 +1129,9 @@ main() {
         fi
 
         # Process each file and capture output
+        local process_start
+        $BENCHMARK && process_start=$(get_time_ms)
+
         while read -r file; do
             [[ -z "$file" ]] && continue
             log_verbose "Processing: $file"
@@ -1001,10 +1140,23 @@ main() {
             echo "$line"
             scan_output="${scan_output}${line}"$'\n'
         done <<< "$files"
+
+        if $BENCHMARK; then
+            local process_end
+            process_end=$(get_time_ms)
+            TIME_PROCESS=$((process_end - process_start))
+            log_benchmark "File processing: ${TIME_PROCESS}ms"
+            log_benchmark "  - Hashing:     ${TIME_HASH}ms"
+            log_benchmark "  - Categorize:  ${TIME_CATEGORIZE}ms"
+            log_benchmark "  - Docstrings:  ${TIME_DOCSTRING}ms"
+        fi
     fi
 
     # Generate manifest if requested
     if $GENERATE_MANIFEST; then
+        local manifest_start
+        $BENCHMARK && manifest_start=$(get_time_ms)
+
         # ==========================================================================
         # STORY-052: Incremental merge or full generation
         # ==========================================================================
@@ -1028,6 +1180,16 @@ main() {
             generate_manifest "$scan_output"
             log_verbose "Manifest generation complete"
         fi
+
+        if $BENCHMARK; then
+            local manifest_end
+            manifest_end=$(get_time_ms)
+            TIME_MANIFEST=$((manifest_end - manifest_start))
+            log_benchmark "Manifest generation: ${TIME_MANIFEST}ms"
+        fi
+
+        local quality_start
+        $BENCHMARK && quality_start=$(get_time_ms)
 
         # ==========================================================================
         # STORY-062: Calculate and embed quality metrics in manifest
@@ -1058,6 +1220,47 @@ main() {
                 fi
             else
                 log_verbose "Warning: Could not calculate quality metrics"
+            fi
+        fi
+
+        if $BENCHMARK; then
+            local quality_end
+            quality_end=$(get_time_ms)
+            TIME_QUALITY=$((quality_end - quality_start))
+            log_benchmark "Quality metrics: ${TIME_QUALITY}ms"
+
+            # Final summary
+            local total_time=$((TIME_WALK + TIME_PROCESS + TIME_MANIFEST + TIME_QUALITY))
+            echo "" >&2
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" >&2
+            echo "⏱  BENCHMARK SUMMARY ($SCANNED_FILES_COUNT files)" >&2
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" >&2
+            printf "   File discovery:    %6dms\n" "$TIME_WALK" >&2
+            printf "   File processing:   %6dms\n" "$TIME_PROCESS" >&2
+            printf "     - Hashing:       %6dms\n" "$TIME_HASH" >&2
+            printf "     - Categorize:    %6dms\n" "$TIME_CATEGORIZE" >&2
+            printf "     - Docstrings:    %6dms\n" "$TIME_DOCSTRING" >&2
+            printf "   Manifest gen:      %6dms\n" "$TIME_MANIFEST" >&2
+            printf "   Quality metrics:   %6dms\n" "$TIME_QUALITY" >&2
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" >&2
+            printf "   TOTAL:             %6dms\n" "$total_time" >&2
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" >&2
+
+            # Performance analysis
+            if [[ $SCANNED_FILES_COUNT -gt 0 ]]; then
+                local avg_per_file=$((TIME_PROCESS / SCANNED_FILES_COUNT))
+                local avg_hash=$((TIME_HASH / SCANNED_FILES_COUNT))
+                echo "" >&2
+                echo "📊 Per-file averages:" >&2
+                printf "   Total: %dms/file | Hash: %dms/file\n" "$avg_per_file" "$avg_hash" >&2
+
+                # Bottleneck analysis
+                echo "" >&2
+                echo "🔍 Bottleneck analysis:" >&2
+                if [[ $TIME_HASH -gt $((TIME_PROCESS / 2)) ]]; then
+                    echo "   ⚠️  Hashing is ${TIME_HASH}ms ($(( TIME_HASH * 100 / TIME_PROCESS ))% of processing)" >&2
+                    echo "   💡 Tip: Use --skip-quality on init, or implement batch hashing" >&2
+                fi
             fi
         fi
     fi

@@ -204,9 +204,9 @@ PRESET
         log_success "Created preset template"
     fi
 
-    # Run initial scan (quiet mode, suppress all output)
+    # Run initial scan (fast mode: skip hashing for instant init)
     log_info "Running initial scan..."
-    if bash "${VDOC_DIR}/core/scan.sh" -m -q >/dev/null 2>&1; then
+    if bash "${VDOC_DIR}/core/scan.sh" -m -q --fast >/dev/null 2>&1; then
         log_success "Generated _manifest.json"
     else
         log_warning "Scan completed with warnings"
