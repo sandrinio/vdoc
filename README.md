@@ -34,14 +34,14 @@ Then open Cursor and type: **`/vdoc init`**
 |----------|----------------|----------------|------------|
 | **Claude Code** | `npx @sandrinio/vdoc install claude` | `/vdoc init` `/vdoc audit` | Skill (SKILL.md) |
 | **Cursor** | `npx @sandrinio/vdoc install cursor` | `/vdoc init` `/vdoc audit` | Command + Rule |
-| **Windsurf** | `npx @sandrinio/vdoc installwindsurf` | `/vdoc` | Workflow + Rule |
-| **VS Code (Copilot)** | `npx @sandrinio/vdoc installvscode` | `/vdoc` | Prompt + Instructions |
-| **Continue** | `npx @sandrinio/vdoc installcontinue` | `/vdoc init` `/vdoc audit` | Invokable Prompt + Rule |
-| **Cline** | `npx @sandrinio/vdoc installcline` | `/vdoc` | Workflow + Rule |
-| **Gemini CLI** | `npx @sandrinio/vdoc installgemini` | `/vdoc init` `/vdoc audit` | TOML Command + GEMINI.md |
-| **JetBrains AI** | `npx @sandrinio/vdoc installjetbrains` | Natural language | Rule only |
-| **JetBrains Junie** | `npx @sandrinio/vdoc installjunie` | Natural language | Guidelines only |
-| **Universal** | `npx @sandrinio/vdoc installagents` | Natural language | AGENTS.md |
+| **Windsurf** | `npx @sandrinio/vdoc install windsurf` | `/vdoc` | Workflow + Rule |
+| **VS Code (Copilot)** | `npx @sandrinio/vdoc install vscode` | `/vdoc` | Prompt + Instructions |
+| **Continue** | `npx @sandrinio/vdoc install continue` | `/vdoc init` `/vdoc audit` | Invokable Prompt + Rule |
+| **Cline** | `npx @sandrinio/vdoc install cline` | `/vdoc` | Workflow + Rule |
+| **Gemini CLI** | `npx @sandrinio/vdoc install gemini` | `/vdoc init` `/vdoc audit` | TOML Command + GEMINI.md |
+| **JetBrains AI** | `npx @sandrinio/vdoc install jetbrains` | Natural language | Rule only |
+| **JetBrains Junie** | `npx @sandrinio/vdoc install junie` | Natural language | Guidelines only |
+| **Universal** | `npx @sandrinio/vdoc install agents` | Natural language | AGENTS.md |
 
 ---
 

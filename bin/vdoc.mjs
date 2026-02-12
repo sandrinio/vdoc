@@ -16,6 +16,8 @@ const PLATFORMS = {
       { src: 'claude/SKILL.md', dest: '.claude/skills/vdoc/SKILL.md' },
       { src: 'claude/references/doc-template.md', dest: '.claude/skills/vdoc/references/doc-template.md' },
       { src: 'claude/references/manifest-schema.json', dest: '.claude/skills/vdoc/references/manifest-schema.json' },
+      { src: 'claude/references/init-workflow.md', dest: '.claude/skills/vdoc/references/init-workflow.md' },
+      { src: 'claude/references/audit-workflow.md', dest: '.claude/skills/vdoc/references/audit-workflow.md' },
     ],
   },
   cursor: {
