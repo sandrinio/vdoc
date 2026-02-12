@@ -21,7 +21,7 @@ vdoc teaches your AI coding agent how to create and maintain feature-centric doc
 ## Quick Start
 
 ```bash
-npx vdoc install cursor
+npx @sandrinio/vdoc install cursor
 ```
 
 Then open Cursor and type: **`/vdoc init`**
@@ -32,16 +32,16 @@ Then open Cursor and type: **`/vdoc init`**
 
 | Platform | Install Command | `/vdoc` Command | Invocation |
 |----------|----------------|----------------|------------|
-| **Claude Code** | `npx vdoc install claude` | `/vdoc init` `/vdoc audit` | Skill (SKILL.md) |
-| **Cursor** | `npx vdoc install cursor` | `/vdoc init` `/vdoc audit` | Command + Rule |
-| **Windsurf** | `npx vdoc install windsurf` | `/vdoc` | Workflow + Rule |
-| **VS Code (Copilot)** | `npx vdoc install vscode` | `/vdoc` | Prompt + Instructions |
-| **Continue** | `npx vdoc install continue` | `/vdoc init` `/vdoc audit` | Invokable Prompt + Rule |
-| **Cline** | `npx vdoc install cline` | `/vdoc` | Workflow + Rule |
-| **Gemini CLI** | `npx vdoc install gemini` | `/vdoc init` `/vdoc audit` | TOML Command + GEMINI.md |
-| **JetBrains AI** | `npx vdoc install jetbrains` | Natural language | Rule only |
-| **JetBrains Junie** | `npx vdoc install junie` | Natural language | Guidelines only |
-| **Universal** | `npx vdoc install agents` | Natural language | AGENTS.md |
+| **Claude Code** | `npx @sandrinio/vdoc install claude` | `/vdoc init` `/vdoc audit` | Skill (SKILL.md) |
+| **Cursor** | `npx @sandrinio/vdoc install cursor` | `/vdoc init` `/vdoc audit` | Command + Rule |
+| **Windsurf** | `npx @sandrinio/vdoc installwindsurf` | `/vdoc` | Workflow + Rule |
+| **VS Code (Copilot)** | `npx @sandrinio/vdoc installvscode` | `/vdoc` | Prompt + Instructions |
+| **Continue** | `npx @sandrinio/vdoc installcontinue` | `/vdoc init` `/vdoc audit` | Invokable Prompt + Rule |
+| **Cline** | `npx @sandrinio/vdoc installcline` | `/vdoc` | Workflow + Rule |
+| **Gemini CLI** | `npx @sandrinio/vdoc installgemini` | `/vdoc init` `/vdoc audit` | TOML Command + GEMINI.md |
+| **JetBrains AI** | `npx @sandrinio/vdoc installjetbrains` | Natural language | Rule only |
+| **JetBrains Junie** | `npx @sandrinio/vdoc installjunie` | Natural language | Guidelines only |
+| **Universal** | `npx @sandrinio/vdoc installagents` | Natural language | AGENTS.md |
 
 ---
 
@@ -50,7 +50,7 @@ Then open Cursor and type: **`/vdoc init`**
 ### 1. Install (~5 seconds)
 
 ```bash
-npx vdoc install claude
+npx @sandrinio/vdoc install claude
 ```
 
 Copies skill files to your AI platform's rules and commands locations. That's it.
@@ -131,7 +131,7 @@ The `_manifest.json` acts as a semantic index. Each entry has a rich `descriptio
 ## Uninstall
 
 ```bash
-npx vdoc uninstall
+npx @sandrinio/vdoc uninstall
 ```
 
 Removes all vdoc skill and rule files from **every** supported platform in one command. No platform argument needed — it scans for and deletes everything vdoc may have created:

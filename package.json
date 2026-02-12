@@ -1,0 +1,30 @@
+{
+  "name": "@sandrinio/vdoc",
+  "version": "3.0.0",
+  "description": "Documentation skills for AI coding agents",
+  "type": "module",
+  "bin": {
+    "vdoc": "bin/vdoc.mjs"
+  },
+  "files": [
+    "bin/",
+    "skills/"
+  ],
+  "keywords": [
+    "documentation",
+    "ai",
+    "coding-agent",
+    "cursor",
+    "claude",
+    "copilot",
+    "windsurf",
+    "cline",
+    "continue",
+    "gemini"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sandrinio/vdoc.git"
+  }
+}

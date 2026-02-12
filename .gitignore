@@ -30,5 +30,8 @@ Thumbs.db
 coverage/
 .nyc_output/
 
+# Environment / secrets
+.env*
+
 # Dependencies (if any test tooling added)
 node_modules/
