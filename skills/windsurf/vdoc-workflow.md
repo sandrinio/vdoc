@@ -23,7 +23,7 @@ The user may also specify: `/vdoc init` or `/vdoc audit`.
 ### Step 2b: Audit Mode
 
 1. Read `vdocs/_manifest.json`
-2. **Stale** — git diff since `last_updated`, cross-ref with `source_files`
+2. **Stale** — git diff since `last_updated`, cross-ref with each doc's "Key Files" section
 3. **Gaps** — undocumented features (new routes, services, models)
 4. **Dead** — docs referencing deleted files
 5. **Cross-refs** — verify Related Features links

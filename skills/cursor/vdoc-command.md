@@ -23,7 +23,7 @@ $ARGUMENTS
 **If the argument is `audit` or empty with existing `vdocs/` folder:**
 
 1. **Read** `vdocs/_manifest.json`
-2. **Stale** — git diff since `last_updated`, cross-ref with `source_files`
+2. **Stale** — git diff since `last_updated`, cross-ref with each doc's "Key Files" section
 3. **Gaps** — find undocumented features (new routes, services, models)
 4. **Dead** — docs referencing deleted source files
 5. **Cross-refs** — verify Related Features links still valid

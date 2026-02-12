@@ -120,12 +120,37 @@ The `_manifest.json` acts as a semantic index. Each entry has a rich `descriptio
       "title": "Authentication - OAuth2 & JWT",
       "version": "1.0.0",
       "description": "OAuth2 flow with Google/GitHub providers, JWT lifecycle, session management via NextAuth.js, route protection middleware, and role-based access control.",
-      "source_files": ["src/lib/auth.ts", "src/middleware.ts"],
-      "features": ["oauth2", "jwt", "session-management", "rbac"]
+      "tags": ["oauth2", "jwt", "session-management", "rbac"]
     }
   ]
 }
 ```
+
+---
+
+## Uninstall
+
+```bash
+npx vdoc uninstall
+```
+
+Removes all vdoc skill and rule files from **every** supported platform in one command. No platform argument needed — it scans for and deletes everything vdoc may have created:
+
+| Platform | Files Removed |
+|----------|--------------|
+| Claude Code | `.claude/skills/vdoc/` |
+| Cursor | `.cursor/rules/vdoc.mdc`, `.cursor/commands/vdoc.md` |
+| Windsurf | `.windsurf/rules/vdoc.md`, `.windsurf/workflows/vdoc.md` |
+| VS Code (Copilot) | `.github/instructions/vdoc.instructions.md`, `.github/prompts/vdoc.prompt.md` |
+| Continue | `.continue/rules/vdoc.md`, `.continue/prompts/vdoc-command.md` |
+| Cline | `.clinerules/vdoc.md`, `.clinerules/workflows/vdoc.md` |
+| Gemini CLI | `.gemini/commands/vdoc.toml` |
+| JetBrains AI | `.aiassistant/rules/vdoc.md` |
+| Universal | `AGENTS.md` (vdoc section only) |
+
+For files shared with other tools (`GEMINI.md`, `.junie/guidelines.md`, `.github/copilot-instructions.md`), only the vdoc-injected section is removed.
+
+Your `vdocs/` documentation folder is **always kept intact**.
 
 ---
 

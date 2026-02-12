@@ -10,11 +10,7 @@
       "title": "Human-Readable Feature Title",
       "version": "1.0.0",
       "description": "Rich semantic description with specific technology names, patterns, and concepts. Detailed enough that an AI can route any user question to this doc by matching against this field.",
-      "source_files": [
-        "src/path/to/main-file.ts",
-        "src/path/to/helper.ts"
-      ],
-      "features": ["feature-tag-1", "feature-tag-2"]
+      "tags": ["keyword-1", "keyword-2"]
     }
   ]
 }

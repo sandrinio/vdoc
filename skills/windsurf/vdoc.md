@@ -18,7 +18,7 @@ Three modes: **init**, **audit**, **query**. All docs live in `vdocs/`. Manifest
 ## Audit ("audit docs")
 
 1. Read `vdocs/_manifest.json`
-2. **Stale**: git diff since `last_updated`, cross-ref with `source_files`
+2. **Stale**: git diff since `last_updated`, cross-ref with each doc's "Key Files" section
 3. **Gaps**: find significant undocumented source files (routes, services, models)
 4. **Dead**: docs referencing deleted source files
 5. **Cross-refs**: verify Related Features links still valid
@@ -27,7 +27,7 @@ Three modes: **init**, **audit**, **query**. All docs live in `vdocs/`. Manifest
 
 ## Query (any documentation question)
 
-Read manifest → match `description`/`features` → read matching doc → answer. If no match, suggest audit.
+Read manifest → match `description`/`tags` → read matching doc → answer. If no match, suggest audit.
 
 ## Doc Template
 
@@ -79,8 +79,7 @@ Read manifest → match `description`/`features` → read matching doc → answe
     "title": "Title",
     "version": "1.0.0",
     "description": "Rich semantic description for AI routing.",
-    "source_files": ["src/file.ts"],
-    "features": ["tag"]
+    "tags": ["keyword-tag"]
   }]
 }
 ```

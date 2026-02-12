@@ -19,7 +19,7 @@ Check if `vdocs/_manifest.json` exists:
 ## Audit Mode
 
 1. Read `vdocs/_manifest.json`
-2. **Stale** — Run `execute_command` with `git log --name-only --since="<last_updated>"`. Cross-ref with `source_files`.
+2. **Stale** — Run `execute_command` with `git log --name-only --since="<last_updated>"`. Cross-ref with each doc's "Key Files" section.
 3. **Gaps** — Find undocumented features (new routes, services, models)
 4. **Dead** — Docs referencing deleted files
 5. **Cross-refs** — Verify Related Features links still valid

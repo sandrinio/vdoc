@@ -116,8 +116,7 @@ Create `vdocs/_manifest.json`:
       "title": "Human-Readable Title",
       "version": "1.0.0",
       "description": "Rich semantic description with technology names, patterns, concepts. Detailed enough for AI to route questions to this doc.",
-      "source_files": ["src/path/file.ts"],
-      "features": ["feature-tag"]
+      "tags": ["keyword-tag"]
     }
   ]
 }
@@ -134,9 +133,9 @@ Verify: every doc has mermaid diagrams, at least 2 constraints, real file paths,
 **Trigger:** User says "audit docs" or similar.
 
 1. **Read manifest** — load `vdocs/_manifest.json`
-2. **Detect stale** — `git diff` or `git log --name-only --since="<last_updated>"` to find changed source files. Cross-reference with manifest `source_files`.
+2. **Detect stale** — `git diff` or `git log --name-only --since="<last_updated>"` to find changed source files. Cross-reference with each doc's "Key Files" section.
 3. **Detect gaps** — scan codebase for significant source files not covered by any doc (new routes, services, models, config).
-4. **Detect dead docs** — check each doc's `source_files` against filesystem. Flag docs referencing deleted files.
+4. **Detect dead docs** — check each doc's "Key Files" against filesystem. Flag docs referencing deleted files.
 5. **Check cross-refs** — verify "Related Features" links still exist and coupling is accurate.
 6. **Report** — present stale, gaps, dead, cross-ref issues, and current docs. Wait for user direction.
 7. **Patch** — update stale docs, generate new docs for gaps, flag dead docs, fix cross-refs. Update manifest.
@@ -148,7 +147,7 @@ Verify: every doc has mermaid diagrams, at least 2 constraints, real file paths,
 **Trigger:** User asks any question about the codebase or documentation.
 
 1. Read `vdocs/_manifest.json`
-2. Match question against `description` and `features` fields
+2. Match question against `description` and `tags` fields
 3. Read matching doc(s)
 4. Answer from documented knowledge
 5. If no match, suggest running an audit

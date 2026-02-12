@@ -23,7 +23,7 @@ Run documentation workflows for this project. Full instructions are in `.github/
 ## If mode is `audit` (or `vdocs/` already exists):
 
 1. Read `vdocs/_manifest.json`
-2. **Stale** — Use #tool:changes to find modified source files. Cross-ref with manifest `source_files`.
+2. **Stale** — Use #tool:changes to find modified source files. Cross-ref with each doc's "Key Files" section.
 3. **Gaps** — Find undocumented features (new routes, services, models)
 4. **Dead** — Docs referencing deleted files
 5. **Cross-refs** — Verify Related Features links still valid

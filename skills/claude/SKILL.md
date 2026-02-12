@@ -90,8 +90,7 @@ Create `vdocs/_manifest.json`:
       "title": "Authentication - OAuth2 & JWT",
       "version": "1.0.0",
       "description": "OAuth2 flow with Google/GitHub providers, JWT token lifecycle, session management via NextAuth.js, route protection middleware, and role-based access control.",
-      "source_files": ["src/lib/auth.ts", "src/middleware.ts"],
-      "features": ["oauth2", "jwt", "session-management", "rbac"]
+      "tags": ["oauth2", "jwt", "session-management", "rbac"]
     }
   ]
 }
@@ -108,7 +107,6 @@ Before finishing, verify:
 - [ ] Every doc's "Key Files" lists real paths that exist in the codebase
 - [ ] Every doc's "Configuration" lists actual env vars from the code
 - [ ] Every doc's "Related Features" references other doc filenames
-- [ ] Manifest `source_files` are real paths
 - [ ] Manifest `description` is detailed enough for semantic routing
 - [ ] No doc is just a shallow restatement of file names — each explains WHY and HOW
 
@@ -126,11 +124,11 @@ Read `vdocs/_manifest.json`. Load the list of documented features and their sour
 
 Run `git log --name-only --since="<last_updated>" --pretty=format:""` or use `git diff` to find all source files that changed since the last audit.
 
-Cross-reference changed files against `source_files` in the manifest to identify which docs are stale.
+Cross-reference changed files against each doc's "Key Files" section to identify which docs are stale.
 
 ### Step 3 — Detect Coverage Gaps
 
-Scan the codebase for significant source files not covered by any doc's `source_files`. Look for:
+Scan the codebase for significant features not covered by any doc. Look for:
 - New route files / API endpoints
 - New service classes or modules
 - New database models / schema changes
@@ -140,7 +138,7 @@ If you find undocumented features, propose new docs.
 
 ### Step 4 — Detect Dead Docs
 
-Check each doc's `source_files` against the actual filesystem. If source files no longer exist, the doc may be dead. Flag it: "PAYMENT_PROCESSING_DOC.md references 3 files that no longer exist — remove or archive?"
+Check each doc's "Key Files" section against the actual filesystem. If key files no longer exist, the doc may be dead. Flag it: "PAYMENT_PROCESSING_DOC.md references 3 files that no longer exist — remove or archive?"
 
 ### Step 5 — Check Cross-References
 
@@ -180,7 +178,7 @@ Wait for user direction, then:
 - Generate new docs for coverage gaps (follow init workflow for each)
 - Flag dead docs for user to confirm deletion
 - Fix cross-reference issues
-- Update manifest: bump versions, update `last_updated`, `last_commit`, `source_files`
+- Update manifest: bump versions, update `last_updated`, `last_commit`
 
 ---
 
@@ -189,7 +187,7 @@ Wait for user direction, then:
 **Trigger:** User asks any question about the codebase or its documentation.
 
 1. Read `vdocs/_manifest.json`
-2. Match the question against `description` and `features` fields
+2. Match the question against `description` and `tags` fields
 3. Read the matching doc(s)
 4. Answer from the documented knowledge
 5. If no doc matches, say so and suggest running `/vdoc audit` to check for coverage gaps
