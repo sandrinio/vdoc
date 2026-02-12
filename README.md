@@ -1,206 +1,137 @@
 # vdoc
 
-**AI-Powered Documentation Generator**
+**Documentation skills for AI coding agents.**
 
-Generate and maintain living documentation for your codebase using AI.
+One install command. Your AI handles the rest.
+
+---
+
+## What is vdoc?
+
+vdoc teaches your AI coding agent how to create and maintain feature-centric documentation for your codebase. It's not a CLI you run — it's a skill file that gets installed into your AI platform. After install, you just talk to your AI.
+
+```
+/vdoc init     →  AI explores codebase → proposes plan → you approve → generates docs
+/vdoc audit    →  AI detects stale, missing, dead docs → reports → patches
+"how does auth work?"  →  AI reads manifest → routes to right doc → answers
+```
 
 ---
 
 ## Quick Start
 
 ```bash
-# Install vdoc
-curl -fsSL https://raw.githubusercontent.com/sandrinio/vdoc/main/scripts/install-global.sh | bash
-
-# Initialize in your project
-cd your-project
-vdoc init --ai claude
-
-# That's it! Open Claude Code and say:
-# "generate documentation for this project"
+npx vdoc install cursor
 ```
 
----
-
-## What is vdoc?
-
-vdoc generates comprehensive documentation from your source code and keeps it current as your codebase evolves. It works with multiple AI coding tools including Claude Code, Cursor, Windsurf, Aider, and Continue.
-
-**Key Features:**
-- **One command install** - `curl | bash` and you're ready
-- **Zero dependencies** - Pure bash, works everywhere
-- **Multi-platform** - Single source of truth, adapters for each AI tool
-- **Quality metrics** - Track documentation coverage, freshness, completeness
-
----
-
-## Installation
-
-### One-liner (Recommended)
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/sandrinio/vdoc/main/scripts/install-global.sh | bash
-```
-
-This installs `vdoc` to `~/.vdoc/` and adds it to your PATH.
-
-### Manual Installation
-
-```bash
-git clone https://github.com/sandrinio/vdoc.git
-cd vdoc
-./install.sh claude  # or: cursor, windsurf, aider, continue
-```
-
-### Uninstall
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/sandrinio/vdoc/main/scripts/install-global.sh | bash -s -- --uninstall
-```
-
----
-
-## Usage
-
-### Initialize Project
-
-```bash
-vdoc init                    # Basic initialization
-vdoc init --ai claude        # Init + Claude Code integration
-vdoc init --ai cursor        # Init + Cursor integration
-```
-
-### Scan Codebase
-
-```bash
-vdoc scan                    # Incremental scan (fast)
-vdoc scan --full             # Full rescan
-```
-
-### Check Quality
-
-```bash
-vdoc quality                 # Terminal report
-vdoc quality --json          # JSON output (for CI)
-vdoc quality --md            # Markdown output
-vdoc quality --threshold 70  # Fail if score < 70
-```
-
-### Manage Platforms
-
-```bash
-vdoc install cursor          # Add Cursor integration
-vdoc install windsurf        # Add Windsurf integration
-vdoc uninstall cursor        # Remove integration
-```
+Then open Cursor and type: **`/vdoc init`**
 
 ---
 
 ## Supported Platforms
 
-| Platform | Command | Integration Location |
-|----------|---------|---------------------|
-| **Claude Code** | `vdoc init --ai claude` | `~/.claude/skills/vdoc/` |
-| **Cursor** | `vdoc init --ai cursor` | `.cursor/rules/vdoc.md` |
-| **Windsurf** | `vdoc init --ai windsurf` | `.windsurfrules` |
-| **Aider** | `vdoc init --ai aider` | `.aider/conventions/` |
-| **Continue** | `vdoc init --ai continue` | `.continue/prompts/` |
+| Platform | Install Command | `/vdoc` Command | Invocation |
+|----------|----------------|----------------|------------|
+| **Claude Code** | `npx vdoc install claude` | `/vdoc init` `/vdoc audit` | Skill (SKILL.md) |
+| **Cursor** | `npx vdoc install cursor` | `/vdoc init` `/vdoc audit` | Command + Rule |
+| **Windsurf** | `npx vdoc install windsurf` | `/vdoc` | Workflow + Rule |
+| **VS Code (Copilot)** | `npx vdoc install vscode` | `/vdoc` | Prompt + Instructions |
+| **Continue** | `npx vdoc install continue` | `/vdoc init` `/vdoc audit` | Invokable Prompt + Rule |
+| **Cline** | `npx vdoc install cline` | `/vdoc` | Workflow + Rule |
+| **Gemini CLI** | `npx vdoc install gemini` | `/vdoc init` `/vdoc audit` | TOML Command + GEMINI.md |
+| **JetBrains AI** | `npx vdoc install jetbrains` | Natural language | Rule only |
+| **JetBrains Junie** | `npx vdoc install junie` | Natural language | Guidelines only |
+| **Universal** | `npx vdoc install agents` | Natural language | AGENTS.md |
 
 ---
 
-## Project Structure
+## How It Works
 
-After initialization, your project will have:
+### 1. Install (~5 seconds)
+
+```bash
+npx vdoc install claude
+```
+
+Copies skill files to your AI platform's rules and commands locations. That's it.
+
+### 2. Init
+
+Type **`/vdoc init`** in your AI tool (or say "document this project"). The skill tells the AI to:
+
+1. **Explore** — identify features, tech stack, architecture
+2. **Plan** — propose a documentation plan for your approval
+3. **Generate** — create feature-centric docs using a consistent template
+4. **Index** — build a semantic manifest for future queries
+
+### 3. Audit
+
+Type **`/vdoc audit`** (or say "audit docs"). The AI detects what changed via git, finds coverage gaps, flags dead docs, checks cross-references, reports everything, and patches only what you approve.
+
+### 4. Query
+
+Ask any question. The AI reads the manifest, routes to the right doc, and answers from documented knowledge.
+
+---
+
+## What Gets Created
 
 ```
 your-project/
 └── vdocs/
-    ├── _manifest.json     # Codebase index + quality metrics
-    ├── .vdoc/
-    │   └── presets/       # Custom presets (optional)
-    └── *.md               # Generated documentation
+    ├── _manifest.json                ← Semantic index (AI reads first)
+    ├── _DOCUMENTATION_PLAN.md        ← Approved plan (kept for reference)
+    ├── PROJECT_OVERVIEW_DOC.md
+    ├── AUTHENTICATION_DOC.md
+    ├── API_REFERENCE_DOC.md
+    ├── DATABASE_SCHEMA_DOC.md
+    └── ...
 ```
+
+Docs are **feature-centric** — organized by what your system does, not by file paths.
 
 ---
 
-## Quality Metrics
+## Documentation Template
 
-vdoc tracks three documentation health metrics:
+Every generated doc follows a consistent structure:
 
-| Metric | Weight | Description |
-|--------|--------|-------------|
-| **Coverage** | 40% | Percentage of files with documentation |
-| **Freshness** | 35% | How recent docs are vs source changes |
-| **Completeness** | 25% | Required sections present in docs |
-
-Run `vdoc quality` to see your score:
-
-```
-Documentation Quality Report
-════════════════════════════════════════════
-
-  Overall Score:  78/100  ███████░░░
-
-────────────────────────────────────────────
-  Coverage:       85%     (42/50 files documented)
-  Freshness:      72%     (14 days avg staleness)
-  Completeness:   80%     (4 docs with gaps)
-════════════════════════════════════════════
-```
+- **Overview** — what it does, why it exists
+- **How It Works** — core logic with mermaid diagrams (max 7-9 nodes per diagram)
+- **Data Model** — entities and relationships
+- **Key Files** — source files that implement this feature
+- **Dependencies & Integrations** — external services, internal features
+- **Configuration** — env vars, feature flags, secrets
+- **Error Handling** — failure modes and user-facing behavior
+- **Constraints & Decisions** — why it's built this way, what you can't change
+- **Related Features** — cross-references and blast radius
 
 ---
 
-## CI Integration
+## Manifest
 
-Use `vdoc quality` as a quality gate in CI:
+The `_manifest.json` acts as a semantic index. Each entry has a rich `description` field that AI uses to route queries to the right doc:
 
-```bash
-# Fail build if quality < 70
-vdoc quality --threshold 70
-
-# JSON output for parsing
-vdoc quality --json | jq '.overall_score'
-```
-
----
-
-## Troubleshooting
-
-### vdoc command not found
-
-Add to your shell profile (`~/.bashrc` or `~/.zshrc`):
-
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-```
-
-### jq not found
-
-Install jq for full functionality:
-
-```bash
-# macOS
-brew install jq
-
-# Ubuntu/Debian
-sudo apt install jq
+```json
+{
+  "documentation": [
+    {
+      "filepath": "AUTHENTICATION_DOC.md",
+      "title": "Authentication - OAuth2 & JWT",
+      "version": "1.0.0",
+      "description": "OAuth2 flow with Google/GitHub providers, JWT lifecycle, session management via NextAuth.js, route protection middleware, and role-based access control.",
+      "source_files": ["src/lib/auth.ts", "src/middleware.ts"],
+      "features": ["oauth2", "jwt", "session-management", "rbac"]
+    }
+  ]
+}
 ```
 
 ---
 
 ## Requirements
 
-- Bash 3.2+ (macOS default)
-- jq (recommended, for JSON processing)
-- Git (optional, for incremental scanning)
-
----
-
-## Documentation
-
-- [Product Specification](vdoc-product-specification.md)
-- [Contributing](CONTRIBUTING.md)
-- [Changelog](CHANGELOG.md)
+None. Your AI coding agent is the runtime.
 
 ---
 
@@ -210,4 +141,4 @@ sudo apt install jq
 
 ---
 
-*vdoc v2.0.0 | Made with AI, for AI-assisted development*
+*vdoc v3.0.0 — Documentation skills for AI coding agents*
