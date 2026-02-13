@@ -1,5 +1,6 @@
 ---
-applyTo: "vdocs/**"
+name: vdoc
+description: "Use when user says /vdoc, 'document this project', 'audit docs', or asks questions about existing project documentation, stale docs, undocumented features, or documentation coverage gaps"
 ---
 
 # vdoc — Documentation Generator
@@ -20,23 +21,31 @@ Documentation must be feature-centric, plan-approved, and grounded in source cod
 
 ---
 
-This project uses vdoc for feature-centric documentation. All docs live in `vdocs/` with a semantic manifest at `vdocs/_manifest.json`.
+Three modes: **init**, **audit**, **query**. All docs live in `vdocs/`. Manifest at `vdocs/_manifest.json` is the semantic index.
 
-For detailed workflows, read the vdoc skill at `.github/skills/vdoc/SKILL.md`.
+## Init (`/vdoc init`)
 
-## Quick Reference
+Read the detailed workflow at `resources/init-workflow.md`.
 
-- **Init**: Explore codebase → Plan docs → Generate → Build manifest → Self-review
-- **Audit**: Read manifest → Detect stale/gaps/dead → Check cross-refs → Report → Patch
-- **Query**: Read manifest → Match description/tags → Read doc → Answer
+Summary: Explore codebase → Plan docs → User approves → Generate using template → Build manifest → Self-review.
 
-## Naming Convention
+## Audit (`/vdoc audit`)
 
-Files: `FEATURE_NAME_DOC.md` — uppercase, feature-named, `_DOC` suffix.
+Read the detailed workflow at `resources/audit-workflow.md`.
+
+Summary: Read manifest → Detect stale/gaps/dead docs → Check cross-refs → Report → Patch with approval.
+
+## Query (any documentation question)
+
+1. Read `vdocs/_manifest.json`
+2. Match question against `description` and `tags` fields
+3. Read matching doc(s)
+4. Answer from documented knowledge
+5. If no match, suggest running an audit
 
 ## Rules
 
-1. **Feature-centric, not file-centric.** One doc per logical feature.
+1. **Feature-centric, not file-centric.** One doc per logical feature, not per source file.
 2. **Mermaid over prose.** Diagram flows. Max 7-9 nodes per diagram.
 3. **Constraints are gold.** Always fill "Constraints & Decisions".
 4. **Rich manifest descriptions.** Pack with specific terms for semantic routing.

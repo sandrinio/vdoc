@@ -1,0 +1,16 @@
+{
+  "project": "<project-name>",
+  "vdoc_version": "3.0.0",
+  "created_at": "<ISO-8601>",
+  "last_updated": "<ISO-8601>",
+  "last_commit": "<short-sha>",
+  "documentation": [
+    {
+      "filepath": "FEATURE_NAME_DOC.md",
+      "title": "Human-Readable Feature Title",
+      "version": "1.0.0",
+      "description": "Rich semantic description with specific technology names, patterns, and concepts. Detailed enough that an AI can route any user question to this doc by matching against this field.",
+      "tags": ["keyword-1", "keyword-2"]
+    }
+  ]
+}

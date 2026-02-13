@@ -1,6 +1,8 @@
 ---
-description: "Generate and maintain feature-centric product documentation. Use when user says /vdoc, 'document this project', 'audit docs', or asks about project documentation."
-globs: ["vdocs/**"]
+name: vdoc
+description: "Use when user says /vdoc, 'document this project', 'audit docs', or asks questions about project documentation. Generates feature-centric docs in vdocs/ with semantic manifest for AI routing."
+argument-hint: "[init|audit] or ask any documentation question"
+user-invocable: true
 ---
 
 # vdoc — Documentation Generator
@@ -9,13 +11,13 @@ Three modes: **init**, **audit**, **query**. All docs live in `vdocs/`. Manifest
 
 ## Init (`/vdoc init`)
 
-Read the detailed workflow at `.clinerules/vdoc/init-workflow.md`.
+Read the detailed workflow at [init-workflow.md](./references/init-workflow.md).
 
-Summary: Explore codebase → Plan docs → User approves → Generate using template → Build manifest → Self-review.
+Summary: Explore codebase → Plan docs → User approves → Generate using [doc template](./references/doc-template.md) → Build manifest per [schema](./references/manifest-schema.json) → Self-review.
 
 ## Audit (`/vdoc audit`)
 
-Read the detailed workflow at `.clinerules/vdoc/audit-workflow.md`.
+Read the detailed workflow at [audit-workflow.md](./references/audit-workflow.md).
 
 Summary: Read manifest → Detect stale/gaps/dead docs → Check cross-refs → Report → Patch with approval.
 

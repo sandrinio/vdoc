@@ -1,12 +1,28 @@
 ---
 name: vdoc
-description: "Use when user says /vdoc, 'document this project', 'audit docs', or asks questions about codebase documentation. Generates feature-centric docs in vdocs/ with semantic manifest for AI routing."
+description: "Use when user says /vdoc, 'document this project', 'audit docs', or asks questions about existing project documentation, stale docs, undocumented features, or documentation coverage gaps"
 argument-hint: "[init|audit] or ask any documentation question"
 user-invocable: true
 allowed-tools: ["Bash", "Read", "Write", "Edit", "Glob", "Grep"]
 ---
 
 # vdoc — Documentation Generator
+
+## Overview
+
+Documentation must be feature-centric, plan-approved, and grounded in source code. Never generate docs from assumptions.
+
+## When to Use
+- User says `/vdoc`, "document this project", "audit docs", or asks about documentation
+- Docs are stale, missing, or out of sync with code (documentation drift, undocumented features, coverage gaps)
+- After significant feature work that changed codebase behavior
+
+## When NOT to Use
+- API reference docs (use JSDoc/TSDoc)
+- README files or contribution guides
+- Inline code comments
+
+---
 
 Three modes: **init**, **audit**, **query**. All docs live in `vdocs/`. Manifest at `vdocs/_manifest.json` is the semantic index.
 
@@ -53,3 +69,17 @@ Files: `FEATURE_NAME_DOC.md` — uppercase, feature-named, `_DOC` suffix.
 4. **Rich manifest descriptions.** Pack with specific terms for semantic routing.
 5. **No hallucination.** Only document what exists in code.
 6. **Plan first, always.** Never generate without user-approved plan. Report before patching.
+
+## Common Mistakes
+- **File-centric instead of feature-centric** — Don't create one doc per source file. Group by logical feature.
+- **Documenting aspirations** — Only document what the code actually does today, not planned work.
+- **Skipping the plan** — Generating without user approval leads to rework and coverage gaps.
+- **Oversized diagrams** — Keep Mermaid to 7-9 nodes; split if larger.
+- **Shallow constraints** — "Constraints & Decisions" is the most valuable section. Dig for non-obvious choices.
+
+## Red Flags — STOP
+- Generating docs without an approved plan
+- Documenting something you haven't verified in source code
+- Creating one doc per file instead of per feature
+- Skipping Mermaid diagrams in "How It Works"
+- Writing manifest descriptions too vague for semantic routing
