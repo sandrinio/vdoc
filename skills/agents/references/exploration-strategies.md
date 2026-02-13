@@ -47,6 +47,22 @@ Match the detected archetype and follow its playbook. Each defines:
 - **What to extract** — what each file category reveals
 - **Feature signals** — patterns that indicate documentable features
 
+### Composing Archetypes
+
+Most real projects don't fit a single archetype. **Combine playbooks** when needed:
+
+- A FastAPI app with AI agent workflows → **Web API** playbook for routes/middleware/auth + read `**/workflows/**`, `**/agents/**`, `**/chains/**`, `**/prompts/**` for the agent layer
+- A Next.js app with a Python microservice → **Full-Stack Framework** + **Web API** playbooks
+- A CLI that wraps an SDK → **CLI Tool** + **Library/SDK** playbooks
+
+**How to compose:**
+1. Pick the **primary archetype** (what the project fundamentally is)
+2. Follow its playbook fully
+3. When you encounter directories/patterns that belong to another archetype, pull in that playbook's glob patterns and feature signals
+4. In the exploration log, note which archetypes you composed and why
+
+Do not force a project into one archetype. The playbooks are building blocks — use what fits.
+
 ---
 
 ### Web API
@@ -287,3 +303,39 @@ If the project doesn't clearly match any archetype:
 5. Check CI/CD config (`.github/workflows/`, `Jenkinsfile`) — pipeline steps reveal build/deploy architecture
 
 Then propose an archetype to the user: *"This looks like a [X] project. I'll explore it using the [X] playbook. Sound right?"*
+
+---
+
+## Existing Documentation
+
+During fingerprinting, check if the project already has documentation:
+
+- `vdocs/_manifest.json` — previous vdoc output
+- `docs/`, `documentation/`, `product_documentation/` — existing docs folder
+- `README.md` (if substantial, beyond basic setup)
+- `*.md` files in the project root
+
+**If existing docs are found:**
+
+1. **Read the existing docs first** — they are a head start, not waste
+2. **Cross-reference with the actual codebase** — verify claims in the docs against real code. Flag anything that's:
+   - **Stale** — docs describe behavior that no longer matches the code
+   - **Missing** — code has features not covered in docs
+   - **Accurate** — docs match the code (reuse this content, don't rewrite it)
+3. **In the exploration log**, add a section:
+
+```markdown
+## Existing Documentation
+| Source | Status | Notes |
+|--------|--------|-------|
+| product_documentation/AUTH_DOC.md | Accurate | Matches current auth flow |
+| product_documentation/API_DOC.md | Stale | 3 new endpoints not documented |
+| (no existing doc) | Gap | RAG retrieval pipeline undocumented |
+```
+
+4. **In the Plan (Step 2)**, propose:
+   - **Update** for stale docs (specify what changed)
+   - **New** for gaps
+   - **Keep** for accurate docs (copy/adapt into vdocs/ format)
+
+This avoids regenerating documentation that already exists and is correct.

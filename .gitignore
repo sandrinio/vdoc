@@ -32,6 +32,7 @@ coverage/
 
 # Environment / secrets
 .env*
+.npmrc
 
 # Dependencies (if any test tooling added)
 node_modules/
