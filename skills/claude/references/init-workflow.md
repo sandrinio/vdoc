@@ -16,6 +16,39 @@ Do not skim. Understand how the system actually works before proposing docs.
 
 **Important:** Use your built-in file-reading tools (Read, Glob, Grep) to explore. Do NOT create scanner scripts, shell scripts, or any tooling. vdoc is purely AI-driven — no scripts, no build steps, no infrastructure.
 
+**Phase 3 — Write Exploration Log**
+After exploring, write `vdocs/_exploration_log.md` documenting what you found:
+
+```markdown
+# Exploration Log
+
+## Fingerprint
+- **Language(s):** e.g., TypeScript, Python
+- **Framework(s):** e.g., Next.js 14, FastAPI
+- **Archetype(s):** e.g., Full-stack Framework
+- **Scope:** e.g., ~85 files, medium
+
+## Files Read
+| # | File | Why | What I Found |
+|---|------|-----|--------------|
+| 1 | package.json | Fingerprint | Next.js 14, Prisma, NextAuth |
+| 2 | src/app/ (listing) | Page tree | 12 routes, 3 API routes |
+| ... | ... | ... | ... |
+
+## Feature Signals Detected
+| Signal | Source File(s) | Proposed Doc |
+|--------|---------------|--------------|
+| Auth middleware + login page | middleware.ts, app/login/page.tsx | AUTHENTICATION_DOC.md |
+| Prisma schema with 8 models | prisma/schema.prisma | DATA_MODEL_DOC.md |
+| ... | ... | ... |
+
+## Ambiguities / Open Questions
+- Could not determine why Redis is in dependencies — no usage found. Ask user.
+- Payments folder exists but appears incomplete / WIP.
+```
+
+This log is your working memory. It feeds directly into Step 2 (Plan).
+
 ## Step 2 — Plan
 
 Create `vdocs/_DOCUMENTATION_PLAN.md` listing each proposed doc:
