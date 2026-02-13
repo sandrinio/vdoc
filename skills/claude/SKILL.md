@@ -1,85 +1,28 @@
 ---
 name: vdoc
-description: "Use when user says /vdoc, 'document this project', 'audit docs', or asks questions about existing project documentation, stale docs, undocumented features, or documentation coverage gaps"
-argument-hint: "[init|audit] or ask any documentation question"
-user-invocable: true
-allowed-tools: ["Bash", "Read", "Write", "Edit", "Glob", "Grep"]
+description: "Query existing project documentation. Use when user asks questions about the codebase and vdocs/ exists. For generating docs use /vdoc-init, for auditing use /vdoc-audit."
 ---
 
-# vdoc — Documentation Generator
+# vdoc — Documentation Query
 
-## Overview
+Answer questions about the codebase using existing documentation in `vdocs/`.
 
-Documentation must be feature-centric, plan-approved, and grounded in source code. Never generate docs from assumptions.
+## Other Commands
 
-## When to Use
-- User says `/vdoc`, "document this project", "audit docs", or asks about documentation
-- Docs are stale, missing, or out of sync with code (documentation drift, undocumented features, coverage gaps)
-- After significant feature work that changed codebase behavior
+- **`/vdoc-init`** — Generate documentation from source code (explore → plan → generate)
+- **`/vdoc-audit`** — Audit docs for stale, missing, or dead entries
 
-## When NOT to Use
-- API reference docs (use JSDoc/TSDoc)
-- README files or contribution guides
-- Inline code comments
-
----
-
-Three modes: **init**, **audit**, **query**. All docs live in `vdocs/`. Manifest at `vdocs/_manifest.json` is the semantic index.
-
-## Init (`/vdoc init`)
-
-Generate feature-centric documentation from source code.
-
-**Workflow:** Explore → Plan → Generate → Manifest → Self-review
-
-For detailed steps, read [references/init-workflow.md](references/init-workflow.md).
-
-**Key rules:**
-- Follow the template in [references/doc-template.md](references/doc-template.md) exactly
-- Manifest schema in [references/manifest-schema.json](references/manifest-schema.json)
-- Never generate without user-approved plan
-- Mermaid diagrams mandatory (max 7-9 nodes)
-- Only document what exists in code
-
-## Audit (`/vdoc audit`)
-
-Detect stale, missing, and dead documentation. Report and patch.
-
-**Workflow:** Read manifest → Detect stale → Detect gaps → Detect dead → Check cross-refs → Report → Patch
-
-For detailed steps, read [references/audit-workflow.md](references/audit-workflow.md).
-
-## Query (any documentation question)
+## How to Answer Questions
 
 1. Read `vdocs/_manifest.json`
-2. Match question against `description` and `tags` fields
-3. Read matching doc(s)
+2. Match the question against `description` and `tags` fields
+3. Read matching doc(s) from `vdocs/`
 4. Answer from documented knowledge
-5. If no match, suggest running `/vdoc audit`
-
-## Naming Convention
-
-Files: `FEATURE_NAME_DOC.md` — uppercase, feature-named, `_DOC` suffix.
+5. If no match or no `vdocs/` folder, suggest running `/vdoc-init`
+6. If docs seem outdated, suggest running `/vdoc-audit`
 
 ## Rules
 
-1. **Feature-centric, not file-centric.** One doc per logical feature, not per source file.
-2. **Mermaid over prose.** Diagram flows. Max 7-9 nodes per diagram.
-3. **Constraints are gold.** Always fill "Constraints & Decisions" — prevents breaking changes.
-4. **Rich manifest descriptions.** Pack with specific terms for semantic routing.
-5. **No hallucination.** Only document what exists in code.
-6. **Plan first, always.** Never generate without user-approved plan. Report before patching.
-
-## Common Mistakes
-- **File-centric instead of feature-centric** — Don't create one doc per source file. Group by logical feature.
-- **Documenting aspirations** — Only document what the code actually does today, not planned work.
-- **Skipping the plan** — Generating without user approval leads to rework and coverage gaps.
-- **Oversized diagrams** — Keep Mermaid to 7-9 nodes; split if larger.
-- **Shallow constraints** — "Constraints & Decisions" is the most valuable section. Dig for non-obvious choices.
-
-## Red Flags — STOP
-- Generating docs without an approved plan
-- Documenting something you haven't verified in source code
-- Creating one doc per file instead of per feature
-- Skipping Mermaid diagrams in "How It Works"
-- Writing manifest descriptions too vague for semantic routing
+- Only answer from what's documented — do not hallucinate
+- Reference specific doc filenames in your answers
+- If the question spans multiple docs, read all relevant ones
