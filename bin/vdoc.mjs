@@ -16,6 +16,7 @@ const PLATFORMS = {
       { src: 'claude/SKILL.md', dest: '.claude/skills/vdoc/SKILL.md' },
       { src: 'claude/vdoc-init.md', dest: '.claude/skills/vdoc-init/SKILL.md' },
       { src: 'claude/vdoc-audit.md', dest: '.claude/skills/vdoc-audit/SKILL.md' },
+      { src: 'claude/references/exploration-strategies.md', dest: '.claude/skills/vdoc-init/references/exploration-strategies.md' },
     ],
   },
   cursor: {
@@ -25,6 +26,7 @@ const PLATFORMS = {
       { src: 'cursor/references/audit-workflow.md', dest: '.cursor/rules/vdoc/references/audit-workflow.md' },
       { src: 'cursor/references/doc-template.md', dest: '.cursor/rules/vdoc/references/doc-template.md' },
       { src: 'cursor/references/manifest-schema.json', dest: '.cursor/rules/vdoc/references/manifest-schema.json' },
+      { src: 'cursor/references/exploration-strategies.md', dest: '.cursor/rules/vdoc/references/exploration-strategies.md' },
       { src: 'cursor/vdoc-command.md', dest: '.cursor/commands/vdoc.md' },
     ],
   },
@@ -35,6 +37,7 @@ const PLATFORMS = {
       { src: 'windsurf/resources/audit-workflow.md', dest: '.windsurf/skills/vdoc/resources/audit-workflow.md' },
       { src: 'windsurf/resources/doc-template.md', dest: '.windsurf/skills/vdoc/resources/doc-template.md' },
       { src: 'windsurf/resources/manifest-schema.json', dest: '.windsurf/skills/vdoc/resources/manifest-schema.json' },
+      { src: 'windsurf/resources/exploration-strategies.md', dest: '.windsurf/skills/vdoc/resources/exploration-strategies.md' },
       { src: 'windsurf/vdoc-workflow.md', dest: '.windsurf/workflows/vdoc.md' },
     ],
   },
@@ -45,6 +48,7 @@ const PLATFORMS = {
       { src: 'vscode/references/audit-workflow.md', dest: '.github/skills/vdoc/references/audit-workflow.md' },
       { src: 'vscode/references/doc-template.md', dest: '.github/skills/vdoc/references/doc-template.md' },
       { src: 'vscode/references/manifest-schema.json', dest: '.github/skills/vdoc/references/manifest-schema.json' },
+      { src: 'vscode/references/exploration-strategies.md', dest: '.github/skills/vdoc/references/exploration-strategies.md' },
       { src: 'vscode/vdoc.instructions.md', dest: '.github/instructions/vdoc.instructions.md' },
       { src: 'vscode/vdoc.prompt.md', dest: '.github/prompts/vdoc.prompt.md' },
       { src: 'vscode/copilot-instructions.md', dest: '.github/copilot-instructions.md', inject: true },
@@ -58,6 +62,7 @@ const PLATFORMS = {
       { src: 'continue/references/audit-workflow.md', dest: '.continue/references/vdoc/audit-workflow.md' },
       { src: 'continue/references/doc-template.md', dest: '.continue/references/vdoc/doc-template.md' },
       { src: 'continue/references/manifest-schema.json', dest: '.continue/references/vdoc/manifest-schema.json' },
+      { src: 'continue/references/exploration-strategies.md', dest: '.continue/references/vdoc/exploration-strategies.md' },
     ],
   },
   cline: {
@@ -68,6 +73,7 @@ const PLATFORMS = {
       { src: 'cline/references/audit-workflow.md', dest: '.clinerules/vdoc/audit-workflow.md' },
       { src: 'cline/references/doc-template.md', dest: '.clinerules/vdoc/doc-template.md' },
       { src: 'cline/references/manifest-schema.json', dest: '.clinerules/vdoc/manifest-schema.json' },
+      { src: 'cline/references/exploration-strategies.md', dest: '.clinerules/vdoc/exploration-strategies.md' },
     ],
   },
   gemini: {
@@ -78,6 +84,7 @@ const PLATFORMS = {
       { src: 'gemini/references/audit-workflow.md', dest: '.gemini/vdoc/audit-workflow.md' },
       { src: 'gemini/references/doc-template.md', dest: '.gemini/vdoc/doc-template.md' },
       { src: 'gemini/references/manifest-schema.json', dest: '.gemini/vdoc/manifest-schema.json' },
+      { src: 'gemini/references/exploration-strategies.md', dest: '.gemini/vdoc/exploration-strategies.md' },
     ],
   },
   jetbrains: {
@@ -87,6 +94,7 @@ const PLATFORMS = {
       { src: 'jetbrains-ai/references/audit-workflow.md', dest: '.aiassistant/vdoc/audit-workflow.md' },
       { src: 'jetbrains-ai/references/doc-template.md', dest: '.aiassistant/vdoc/doc-template.md' },
       { src: 'jetbrains-ai/references/manifest-schema.json', dest: '.aiassistant/vdoc/manifest-schema.json' },
+      { src: 'jetbrains-ai/references/exploration-strategies.md', dest: '.aiassistant/vdoc/exploration-strategies.md' },
     ],
   },
   junie: {
@@ -96,6 +104,7 @@ const PLATFORMS = {
       { src: 'junie/references/audit-workflow.md', dest: '.junie/vdoc/audit-workflow.md' },
       { src: 'junie/references/doc-template.md', dest: '.junie/vdoc/doc-template.md' },
       { src: 'junie/references/manifest-schema.json', dest: '.junie/vdoc/manifest-schema.json' },
+      { src: 'junie/references/exploration-strategies.md', dest: '.junie/vdoc/exploration-strategies.md' },
     ],
   },
   agents: {
@@ -105,6 +114,7 @@ const PLATFORMS = {
       { src: 'agents/references/audit-workflow.md', dest: '.agents/vdoc/audit-workflow.md' },
       { src: 'agents/references/doc-template.md', dest: '.agents/vdoc/doc-template.md' },
       { src: 'agents/references/manifest-schema.json', dest: '.agents/vdoc/manifest-schema.json' },
+      { src: 'agents/references/exploration-strategies.md', dest: '.agents/vdoc/exploration-strategies.md' },
     ],
   },
 };

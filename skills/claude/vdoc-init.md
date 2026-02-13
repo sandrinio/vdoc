@@ -11,15 +11,17 @@ Generate feature-centric documentation from source code. All docs go in `vdocs/`
 
 ## Step 1 — Explore
 
-Read the codebase thoroughly using Read, Glob, and Grep. Identify:
+Follow the two-phase exploration strategy in `references/exploration-strategies.md`:
 
-- **Tech stack**: languages, frameworks, databases, ORMs
-- **Features**: authentication, API, payments, notifications, search, etc.
-- **Architecture**: monolith vs microservices, frontend/backend split, key patterns (MVC, event-driven, etc.)
-- **Integrations**: third-party services (Stripe, AWS, Redis, etc.)
-- **Entry points**: where requests come in, how they flow through the system
+**Phase 1 — Fingerprint** (3-5 file reads max)
+Read package/config files and directory structure using Read, Glob, and Grep to identify the project's language, framework, and archetype (Web API, Frontend SPA, Full-stack, CLI, Library, Mobile, Data Pipeline, Monorepo, Microservices, or Infrastructure).
 
-Do not skim. Read key files — entry points, config files, route definitions, schema files, middleware. Understand how the system actually works before proposing docs.
+**Phase 2 — Targeted Exploration** (archetype-specific)
+Apply the matching archetype playbook from `references/exploration-strategies.md`. Read files in priority order using the glob patterns listed. Identify feature signals — each signal maps to a documentable feature.
+
+If the project spans multiple archetypes (e.g., a monorepo with frontend + API), apply multiple playbooks. If no archetype matches, use the Fallback strategy and confirm with the user.
+
+Do not skim. Understand how the system actually works before proposing docs.
 
 ## Step 2 — Plan
 
