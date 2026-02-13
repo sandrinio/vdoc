@@ -12,6 +12,8 @@ Read the codebase thoroughly. Identify:
 
 Do not skim. Read key files — entry points, config files, route definitions, schema files, middleware. Understand how the system actually works before proposing docs.
 
+**Important:** Use your built-in file-reading tools to explore. Do NOT create scanner scripts, shell scripts, or any tooling. vdoc is purely AI-driven — no scripts, no build steps, no infrastructure.
+
 ## Step 2 — Plan
 
 Create `vdocs/_DOCUMENTATION_PLAN.md` listing each proposed doc:
