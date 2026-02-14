@@ -10,8 +10,8 @@ Run documentation workflows for this project. Full instructions are in GEMINI.md
 ## If "init" or no vdocs/ folder exists:
 
 1. **Explore** — Read the codebase: tech stack, features, architecture, integrations, entry points. Read actual files.
-2. **Plan** — Create `vdocs/_DOCUMENTATION_PLAN.md` listing proposed docs. Present to user. Wait for approval.
-3. **Generate** — For each doc, read ALL relevant source files. Write `vdocs/FEATURE_NAME_DOC.md` following the template at @.gemini/vdoc/doc-template.md
+2. **Plan** — Write `vdocs/_DOCUMENTATION_PLAN.md` to disk listing proposed docs. Present to user. Wait for approval.
+3. **Generate** — Read template from @.gemini/vdoc/doc-template.md once. Then generate docs **one at a time**: read sources → write `vdocs/FEATURE_NAME_DOC.md` → confirm → next
 4. **Manifest** — Create `vdocs/_manifest.json` using schema at @.gemini/vdoc/manifest-schema.json
 5. **Verify** — Every doc has mermaid diagrams, real paths, 2+ constraints, cross-references.
 

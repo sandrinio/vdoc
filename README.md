@@ -47,30 +47,48 @@ Then open Cursor and type: **`/vdoc init`**
 
 ## How It Works
 
+vdoc is **plan-first**. The AI proposes — you decide. Nothing gets generated until you approve.
+
 ### 1. Install (~5 seconds)
 
 ```bash
 npx @sandrinio/vdoc install claude
 ```
 
-Copies skill files to your AI platform's rules and commands locations. That's it.
+Copies skill files to your AI platform's config. No dependencies, no build step.
 
-### 2. Init
+### 2. Init — `/vdoc-init`
 
-Type **`/vdoc-init`** in your AI tool (or say "document this project"). The skill tells the AI to:
+This is the main workflow. Type `/vdoc-init` (or say "document this project") and the AI runs through four phases:
 
-1. **Explore** — identify features, tech stack, architecture
-2. **Plan** — propose a documentation plan for your approval
-3. **Generate** — create feature-centric docs using a consistent template
-4. **Index** — build a semantic manifest for future queries
+**Phase 1: Explore** — The AI reads your project's config files and directory structure to identify the language, framework, and architecture. It uses archetype-based strategies (Web API, SPA, Full-Stack, CLI, Library, etc.) to know exactly which files to scan. The result is an exploration log documenting every file read and every feature signal detected.
 
-### 3. Update
+**Phase 2: Plan** — Based on what it found, the AI creates a documentation plan — a list of proposed docs, each covering one logical feature (not one file). The plan is saved as a file you can review.
 
-Type **`/vdoc-update`** (or say "update docs"). The AI detects what changed via git, finds coverage gaps, flags dead docs, checks cross-references, reports everything, and patches only what you approve.
+**Phase 3: You review** — The AI presents the plan and asks for your input:
+- *"Should I merge API routes and middleware into one doc?"*
+- *"I found a websocket system — want that documented separately?"*
+- *"Any legacy systems I should skip?"*
 
-### 4. Create
+You can add, remove, rename, or restructure docs before approving. **Nothing is generated until you say go.**
 
-Type **`/vdoc-create authentication system`** to document a single feature on demand. The AI locates the relevant source files, generates one doc, and updates the manifest.
+**Phase 4: Generate** — For each approved doc, the AI reads all relevant source files, follows a consistent template, and writes feature-centric documentation with mermaid diagrams, real code references, and a semantic manifest for future AI queries.
+
+### 3. Update — `/vdoc-update`
+
+Type `/vdoc-update` (or `/vdoc-audit`) when your code has changed. The AI:
+
+1. Checks git history to find which source files changed since docs were last updated
+2. Cross-references changes against each doc's "Key Files" to identify stale docs
+3. Scans for new features not covered by any doc
+4. Flags dead docs whose source files were deleted
+5. Verifies cross-references between docs
+
+It presents a report and waits for your direction before patching anything.
+
+### 4. Create — `/vdoc-create <feature>`
+
+Type `/vdoc-create authentication system` to document a single feature on demand. The AI locates the relevant source files, generates one doc following the same template, and updates the manifest. Useful for adding docs incrementally without re-running the full init.
 
 ---
 
@@ -94,6 +112,38 @@ your-project/
 ```
 
 Docs are **feature-centric** — organized by what your system does, not by file paths.
+
+---
+
+## The Workflow
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                      /vdoc-init                         │
+│                                                         │
+│   Explore ──→ Plan ──→ You Review ──→ Generate          │
+│   (auto)      (auto)   (you decide)   (auto)            │
+│                             │                           │
+│                    add / remove / rename                 │
+│                    merge / split docs                    │
+│                    skip features                        │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│               /vdoc-update  or  /vdoc-audit             │
+│                                                         │
+│   Git Diff ──→ Detect Stale ──→ Report ──→ You Approve  │
+│                Detect Gaps       (auto)    ──→ Patch     │
+│                Detect Dead                              │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────┐
+│              /vdoc-create <feature>                      │
+│                                                         │
+│   Locate Source ──→ Generate Doc ──→ Update Manifest    │
+│   (auto)            (auto)           (auto)             │
+└─────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -171,4 +221,4 @@ None. Your AI coding agent is the runtime.
 
 ---
 
-*vdoc v3.5.0 — Documentation skills for AI coding agents*
+*vdoc v3.5.2 — Documentation skills for AI coding agents*

@@ -51,7 +51,9 @@ This log is your working memory. It feeds directly into Step 2 (Plan).
 
 ## Step 2 — Plan
 
-Create `vdocs/_DOCUMENTATION_PLAN.md` listing each proposed doc:
+Write `vdocs/_DOCUMENTATION_PLAN.md` to disk AND present it to the user in the same step. The file must be persisted — do not just show it in chat.
+
+Use this format:
 
 ```markdown
 # Documentation Plan
@@ -68,7 +70,7 @@ Create `vdocs/_DOCUMENTATION_PLAN.md` listing each proposed doc:
 - Docs should be useful for onboarding AND as AI context for planning changes
 ```
 
-Present the plan to the user. Actively suggest changes:
+After writing the file, present the plan to the user. Actively suggest changes:
 - "Should I merge X and Y into one doc?"
 - "I found a websocket system — want that documented separately?"
 - "Any internal/legacy systems I should skip?"
@@ -77,11 +79,15 @@ Wait for user approval before proceeding.
 
 ## Step 3 — Generate
 
-For each approved doc:
+Read the template from [doc-template.md](./doc-template.md) once before starting.
+
+Then generate docs **one at a time, sequentially**. For each approved doc:
 
 1. Read ALL relevant source files for that feature — not just the main file, but helpers, types, middleware, tests
-2. Follow the template in [doc-template.md](./doc-template.md) exactly
-3. Write to `vdocs/FEATURE_NAME_DOC.md`
+2. Write `vdocs/FEATURE_NAME_DOC.md` following the template exactly
+3. Confirm the file was written before moving to the next doc
+
+Do NOT attempt to generate multiple docs from memory. Each doc is a fresh cycle: read sources → write doc → next.
 
 **Writing rules:**
 

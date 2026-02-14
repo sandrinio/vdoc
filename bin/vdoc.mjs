@@ -232,6 +232,13 @@ function install(platform) {
 
   console.log(`\nvdoc → installing for ${platform}\n`);
 
+  // Create vdocs/ output directory
+  const vdocsDir = join(CWD, 'vdocs');
+  if (!existsSync(vdocsDir)) {
+    mkdirSync(vdocsDir, { recursive: true });
+    console.log(`  ✓ vdocs/`);
+  }
+
   for (const file of config.files) {
     if (file.inject) {
       injectFile(file.src, file.dest);
