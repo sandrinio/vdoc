@@ -1,5 +1,5 @@
 ---
-name: vdoc
+name: vdoc-config
 description: "Query existing project documentation. Use when user asks questions about the codebase and vdocs/ exists. For generating docs use /vdoc-init, for auditing use /vdoc-audit."
 ---
 

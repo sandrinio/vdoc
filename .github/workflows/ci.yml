@@ -7,52 +7,92 @@ on:
     branches: [main]
 
 jobs:
-  lint:
-    name: Shellcheck
+  validate:
+    name: Validate Package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Install shellcheck
-        run: sudo apt-get install -y shellcheck
-      
-      - name: Run shellcheck on core scripts
-        run: |
-          shellcheck core/scan.sh
-          shellcheck install.sh
-          shellcheck adapters/*/generate.sh
 
-  test:
-    name: Bats Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install bats-core
-        run: |
-          git clone https://github.com/bats-core/bats-core.git
-          cd bats-core
-          sudo ./install.sh /usr/local
-      
-      - name: Run tests
-        run: bats tests/*.bats
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-  validate-presets:
-    name: Validate Presets
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Check preset syntax
+      - name: Verify installer parses
+        run: node --check bin/vdoc.mjs
+
+      - name: Verify all source files exist
         run: |
-          for preset in core/presets/*.conf; do
-            echo "Validating $preset..."
-            # Source the preset to check for syntax errors
-            bash -n "$preset" || exit 1
-            # Check required variables are defined
-            source "$preset"
-            [[ -n "${PRESET_NAME:-}" ]] || { echo "Missing PRESET_NAME in $preset"; exit 1; }
-            [[ -n "${EXCLUDE_DIRS:-}" ]] || { echo "Missing EXCLUDE_DIRS in $preset"; exit 1; }
-            [[ -n "${DOC_SIGNALS:-}" ]] || { echo "Missing DOC_SIGNALS in $preset"; exit 1; }
-            echo "  ✓ Valid"
+          # Extract all `src:` paths from PLATFORMS in vdoc.mjs and verify each exists
+          node --input-type=module -e "
+            import { readFileSync, existsSync } from 'fs';
+            import { join } from 'path';
+
+            const content = readFileSync('bin/vdoc.mjs', 'utf8');
+            const srcMatches = [...content.matchAll(/src:\s*'([^']+)'/g)];
+            let missing = 0;
+
+            for (const [, src] of srcMatches) {
+              const path = join('skills', src);
+              if (!existsSync(path)) {
+                console.error('  ✗ Missing: ' + path);
+                missing++;
+              }
+            }
+
+            if (missing > 0) {
+              console.error('\n' + missing + ' source file(s) missing');
+              process.exit(1);
+            }
+
+            console.log('  ✓ All ' + srcMatches.length + ' source files exist');
+          "
+
+      - name: Validate JSON files
+        run: |
+          node --input-type=module -e "
+            import { readFileSync, readdirSync, statSync } from 'fs';
+            import { join, extname } from 'path';
+
+            function findJson(dir) {
+              const files = [];
+              for (const entry of readdirSync(dir)) {
+                const path = join(dir, entry);
+                if (statSync(path).isDirectory()) {
+                  files.push(...findJson(path));
+                } else if (extname(entry) === '.json' && entry !== 'package.json' && entry !== 'package-lock.json') {
+                  files.push(path);
+                }
+              }
+              return files;
+            }
+
+            const jsonFiles = findJson('skills');
+            let errors = 0;
+
+            for (const file of jsonFiles) {
+              try {
+                JSON.parse(readFileSync(file, 'utf8'));
+              } catch (e) {
+                console.error('  ✗ Invalid JSON: ' + file + ' — ' + e.message);
+                errors++;
+              }
+            }
+
+            if (errors > 0) {
+              process.exit(1);
+            }
+
+            console.log('  ✓ All ' + jsonFiles.length + ' JSON files valid');
+          "
+
+      - name: Verify install command runs
+        run: |
+          # Test that each platform install works in a temp directory
+          cd "$(mktemp -d)"
+          for platform in claude cursor windsurf vscode continue cline gemini jetbrains junie agents; do
+            node "$GITHUB_WORKSPACE/bin/vdoc.mjs" install "$platform" || {
+              echo "  ✗ Install failed for: $platform"
+              exit 1
+            }
           done
+          echo "  ✓ All platform installs succeed"

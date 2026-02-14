@@ -17,7 +17,7 @@ Do not skim. Understand how the system actually works before proposing docs.
 **Important:** Use your built-in file-reading tools (Read, Glob, Grep) to explore. Do NOT create scanner scripts, shell scripts, or any tooling. vdoc is purely AI-driven — no scripts, no build steps, no infrastructure.
 
 **Phase 3 — Write Exploration Log**
-After exploring, write `vdocs/_exploration_log.md` documenting what you found:
+After exploring, write `.claude/skills/vdoc-config/_exploration_log.md` documenting what you found:
 
 ```markdown
 # Exploration Log
@@ -51,7 +51,7 @@ This log is your working memory. It feeds directly into Step 2 (Plan).
 
 ## Step 2 — Plan
 
-Create `vdocs/_DOCUMENTATION_PLAN.md` listing each proposed doc:
+Create `.claude/skills/vdoc-config/_DOCUMENTATION_PLAN.md` listing each proposed doc:
 
 ```markdown
 # Documentation Plan
@@ -80,7 +80,7 @@ Wait for user approval before proceeding.
 For each approved doc:
 
 1. Read ALL relevant source files for that feature — not just the main file, but helpers, types, middleware, tests
-2. Follow the template in `references/doc-template.md` exactly
+2. Read the template from `.claude/skills/vdoc-config/references/doc-template.md` and follow it exactly
 3. Write to `vdocs/FEATURE_NAME_DOC.md`
 
 **Writing rules:**
@@ -94,7 +94,7 @@ For each approved doc:
 
 ## Step 4 — Manifest
 
-Create `vdocs/_manifest.json` using the schema in `references/manifest-schema.json`.
+Create `vdocs/_manifest.json` using the schema in `.claude/skills/vdoc-config/references/manifest-schema.json`.
 
 The `description` field is critical — write it rich enough that you can route any user question to the right doc by matching against descriptions. Include specific technology names, patterns, and concepts.
 

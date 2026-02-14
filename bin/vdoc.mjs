@@ -13,10 +13,12 @@ const CWD = process.cwd();
 const PLATFORMS = {
   claude: {
     files: [
-      { src: 'claude/SKILL.md', dest: '.claude/skills/vdoc/SKILL.md' },
       { src: 'claude/vdoc-init.md', dest: '.claude/skills/vdoc-init/SKILL.md' },
-      { src: 'claude/vdoc-audit.md', dest: '.claude/skills/vdoc-audit/SKILL.md' },
+      { src: 'claude/vdoc-update.md', dest: '.claude/skills/vdoc-update/SKILL.md' },
+      { src: 'claude/vdoc-create.md', dest: '.claude/skills/vdoc-create/SKILL.md' },
       { src: 'claude/references/exploration-strategies.md', dest: '.claude/skills/vdoc-init/references/exploration-strategies.md' },
+      { src: 'claude/references/doc-template.md', dest: '.claude/skills/vdoc-config/references/doc-template.md' },
+      { src: 'claude/references/manifest-schema.json', dest: '.claude/skills/vdoc-config/references/manifest-schema.json' },
     ],
   },
   cursor: {
@@ -257,8 +259,10 @@ function uninstall() {
 
   // Clean skill directories that may have nested files
   const skillDirs = [
-    join(CWD, '.claude', 'skills', 'vdoc'),
+    join(CWD, '.claude', 'skills', 'vdoc-config'),
     join(CWD, '.claude', 'skills', 'vdoc-init'),
+    join(CWD, '.claude', 'skills', 'vdoc-update'),
+    join(CWD, '.claude', 'skills', 'vdoc-create'),
     join(CWD, '.claude', 'skills', 'vdoc-audit'),
     join(CWD, '.cursor', 'rules', 'vdoc'),
     join(CWD, '.windsurf', 'skills', 'vdoc'),
