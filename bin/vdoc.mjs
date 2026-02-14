@@ -15,6 +15,7 @@ const PLATFORMS = {
     files: [
       { src: 'claude/vdoc-init.md', dest: '.claude/skills/vdoc-init/SKILL.md' },
       { src: 'claude/vdoc-update.md', dest: '.claude/skills/vdoc-update/SKILL.md' },
+      { src: 'claude/vdoc-audit.md', dest: '.claude/skills/vdoc-audit/SKILL.md' },
       { src: 'claude/vdoc-create.md', dest: '.claude/skills/vdoc-create/SKILL.md' },
       { src: 'claude/references/exploration-strategies.md', dest: '.claude/skills/vdoc-init/references/exploration-strategies.md' },
       { src: 'claude/references/doc-template.md', dest: '.claude/skills/vdoc-config/references/doc-template.md' },
