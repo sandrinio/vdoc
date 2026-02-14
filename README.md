@@ -11,9 +11,9 @@ One install command. Your AI handles the rest.
 vdoc teaches your AI coding agent how to create and maintain feature-centric documentation for your codebase. It's not a CLI you run — it's a skill file that gets installed into your AI platform. After install, you just talk to your AI.
 
 ```
-/vdoc init     →  AI explores codebase → proposes plan → you approve → generates docs
-/vdoc audit    →  AI detects stale, missing, dead docs → reports → patches
-"how does auth work?"  →  AI reads manifest → routes to right doc → answers
+/vdoc-init              →  AI explores codebase → proposes plan → you approve → generates docs
+/vdoc-update            →  AI detects stale, missing, dead docs → reports → patches
+/vdoc-create <feature>  →  AI documents one specific feature on demand
 ```
 
 ---
@@ -32,9 +32,9 @@ Then open Cursor and type: **`/vdoc init`**
 
 | Platform | Install Command | `/vdoc` Command | Invocation |
 |----------|----------------|----------------|------------|
-| **Claude Code** | `npx @sandrinio/vdoc install claude` | `/vdoc init` `/vdoc audit` | Skill (SKILL.md) |
+| **Claude Code** | `npx @sandrinio/vdoc install claude` | `/vdoc-init` `/vdoc-update` `/vdoc-create` | Skills |
 | **Cursor** | `npx @sandrinio/vdoc install cursor` | `/vdoc init` `/vdoc audit` | Command + Rule |
-| **Windsurf** | `npx @sandrinio/vdoc install windsurf` | `/vdoc` | Workflow + Rule |
+| **Windsurf** | `npx @sandrinio/vdoc install windsurf` | `/vdoc` | Workflow + Skill |
 | **VS Code (Copilot)** | `npx @sandrinio/vdoc install vscode` | `/vdoc` | Prompt + Instructions |
 | **Continue** | `npx @sandrinio/vdoc install continue` | `/vdoc init` `/vdoc audit` | Invokable Prompt + Rule |
 | **Cline** | `npx @sandrinio/vdoc install cline` | `/vdoc` | Workflow + Rule |
@@ -57,20 +57,20 @@ Copies skill files to your AI platform's rules and commands locations. That's it
 
 ### 2. Init
 
-Type **`/vdoc init`** in your AI tool (or say "document this project"). The skill tells the AI to:
+Type **`/vdoc-init`** in your AI tool (or say "document this project"). The skill tells the AI to:
 
 1. **Explore** — identify features, tech stack, architecture
 2. **Plan** — propose a documentation plan for your approval
 3. **Generate** — create feature-centric docs using a consistent template
 4. **Index** — build a semantic manifest for future queries
 
-### 3. Audit
+### 3. Update
 
-Type **`/vdoc audit`** (or say "audit docs"). The AI detects what changed via git, finds coverage gaps, flags dead docs, checks cross-references, reports everything, and patches only what you approve.
+Type **`/vdoc-update`** (or say "update docs"). The AI detects what changed via git, finds coverage gaps, flags dead docs, checks cross-references, reports everything, and patches only what you approve.
 
-### 4. Query
+### 4. Create
 
-Ask any question. The AI reads the manifest, routes to the right doc, and answers from documented knowledge.
+Type **`/vdoc-create authentication system`** to document a single feature on demand. The AI locates the relevant source files, generates one doc, and updates the manifest.
 
 ---
 
@@ -78,14 +78,19 @@ Ask any question. The AI reads the manifest, routes to the right doc, and answer
 
 ```
 your-project/
-└── vdocs/
-    ├── _manifest.json                ← Semantic index (AI reads first)
-    ├── _DOCUMENTATION_PLAN.md        ← Approved plan (kept for reference)
-    ├── PROJECT_OVERVIEW_DOC.md
-    ├── AUTHENTICATION_DOC.md
-    ├── API_REFERENCE_DOC.md
-    ├── DATABASE_SCHEMA_DOC.md
-    └── ...
+├── vdocs/
+│   ├── _manifest.json                ← Semantic index (AI reads first)
+│   ├── PROJECT_OVERVIEW_DOC.md
+│   ├── AUTHENTICATION_DOC.md
+│   ├── API_REFERENCE_DOC.md
+│   ├── DATABASE_SCHEMA_DOC.md
+│   └── ...
+└── .claude/skills/vdoc-config/       ← Planning artifacts (Claude example)
+    ├── _exploration_log.md           ← What was scanned and why
+    ├── _DOCUMENTATION_PLAN.md        ← Approved plan
+    └── references/
+        ├── doc-template.md           ← Shared doc template
+        └── manifest-schema.json      ← Shared manifest schema
 ```
 
 Docs are **feature-centric** — organized by what your system does, not by file paths.
@@ -138,7 +143,7 @@ Removes all vdoc skill and rule files from **every** supported platform in one c
 
 | Platform | Files Removed |
 |----------|--------------|
-| Claude Code | `.claude/skills/vdoc/` |
+| Claude Code | `.claude/skills/vdoc-init/`, `vdoc-update/`, `vdoc-create/`, `vdoc-config/` |
 | Cursor | `.cursor/rules/vdoc.mdc`, `.cursor/commands/vdoc.md` |
 | Windsurf | `.windsurf/rules/vdoc.md`, `.windsurf/workflows/vdoc.md` |
 | VS Code (Copilot) | `.github/instructions/vdoc.instructions.md`, `.github/prompts/vdoc.prompt.md` |
@@ -166,4 +171,4 @@ None. Your AI coding agent is the runtime.
 
 ---
 
-*vdoc v3.0.0 — Documentation skills for AI coding agents*
+*vdoc v3.5.0 — Documentation skills for AI coding agents*
