@@ -20,6 +20,10 @@ const PLATFORMS = {
       { src: 'claude/references/exploration-strategies.md', dest: '.claude/skills/vdoc/references/exploration-strategies.md' },
       { src: 'claude/references/doc-template.md', dest: '.claude/skills/vdoc/references/doc-template.md' },
       { src: 'claude/references/manifest-schema.json', dest: '.claude/skills/vdoc/references/manifest-schema.json' },
+      { src: 'claude/commands/vdoc-init.md', dest: '.claude/commands/vdoc-init.md' },
+      { src: 'claude/commands/vdoc-create.md', dest: '.claude/commands/vdoc-create.md' },
+      { src: 'claude/commands/vdoc-update.md', dest: '.claude/commands/vdoc-update.md' },
+      { src: 'claude/commands/vdoc-audit.md', dest: '.claude/commands/vdoc-audit.md' },
     ],
   },
   cursor: {
