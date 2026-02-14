@@ -265,6 +265,7 @@ function uninstall() {
     join(CWD, '.claude', 'skills', 'vdoc-update'),
     join(CWD, '.claude', 'skills', 'vdoc-create'),
     join(CWD, '.claude', 'skills', 'vdoc-audit'),
+    join(CWD, '.claude', 'skills', 'vdoc'),
     join(CWD, '.cursor', 'rules', 'vdoc'),
     join(CWD, '.windsurf', 'skills', 'vdoc'),
     join(CWD, '.github', 'skills', 'vdoc'),
