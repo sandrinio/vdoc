@@ -8,7 +8,7 @@ One install command. Your AI handles the rest.
 
 ## What is vdoc?
 
-vdoc teaches your AI coding agent how to create and maintain feature-centric documentation for your codebase. It's not a CLI you run — it's a skill file that gets installed into your AI platform. After install, you just talk to your AI.
+vdoc gives your AI coding agent the ability to create and maintain feature-centric documentation for your codebase. It's not a CLI you run — it's a skill file that gets installed into your AI platform. After install, you just talk to your AI.
 
 ```
 /vdoc-init              →  AI explores codebase → proposes plan → you approve → generates docs
@@ -21,10 +21,10 @@ vdoc teaches your AI coding agent how to create and maintain feature-centric doc
 ## Quick Start
 
 ```bash
-npx @sandrinio/vdoc install cursor
+npx @sandrinio/vdoc install claude
 ```
 
-Then open Cursor and type: **`/vdoc init`**
+Then type: **`/vdoc-init`**
 
 ---
 
@@ -165,7 +165,9 @@ Every generated doc follows a consistent structure:
 
 ## Manifest
 
-The `_manifest.json` acts as a semantic index. Each entry has a rich `description` field that AI uses to route queries to the right doc:
+The `_manifest.json` is a map for your AI. Instead of reading every doc to find the right one, the AI reads the manifest first and picks the relevant doc based on rich descriptions and tags.
+
+When you ask "how does authentication work?", the AI matches your question against manifest descriptions and goes straight to `AUTHENTICATION_DOC.md` — no scanning, no guessing.
 
 ```json
 {

@@ -1,13 +1,6 @@
----
-name: vdoc-update
-description: "Update existing vdocs to match current code. Use when user says 'update docs', 'sync docs', 'check docs', or documentation may be out of sync with code."
----
-
-# vdoc update — Documentation Update
+# Audit Workflow
 
 Detect stale, missing, and dead documentation. Report and patch. Do NOT create scripts, shell files, scanners, or any tooling — use your built-in tools (Read, Glob, Grep, Bash for git commands) for everything.
-
----
 
 ## Step 1 — Read Current State
 
@@ -44,7 +37,7 @@ Read each doc's "Related Features" section. Verify that:
 Present a clear report:
 
 ```
-Update Report:
+Audit Results:
 
 STALE (source files changed):
   - AUTHENTICATION_DOC.md — src/lib/auth.ts changed (added GitHub provider)
@@ -66,15 +59,9 @@ CURRENT (no changes needed):
 Proceed with fixes?
 ```
 
-**Wait for user direction**, then:
+Wait for user direction, then:
 - Patch stale docs (re-read source files, update affected sections only)
-- Generate new docs for coverage gaps (use `/vdoc-create` for each)
+- Generate new docs for coverage gaps (follow create workflow for each)
 - Flag dead docs for user to confirm deletion
 - Fix cross-reference issues
 - Update manifest: bump versions, update `last_updated`, `last_commit`
-
-## Rules
-
-1. **No scripts.** Do NOT create shell scripts, scanners, or build tools. Use Read/Glob/Grep/Bash(git).
-2. **Report before patching.** Always present findings and wait for user direction.
-3. **No hallucination.** Only report what you verified in the code and filesystem.

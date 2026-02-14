@@ -1,13 +1,4 @@
----
-name: vdoc-init
-description: "Generate feature-centric documentation from source code. Use when user says 'document this project', 'generate docs', or wants to create vdocs from scratch."
----
-
-# vdoc init — Generate Documentation
-
-Generate feature-centric documentation from source code. All docs go in `vdocs/`. Do NOT create scripts, shell files, scanners, or any tooling — use your built-in tools (Read, Glob, Grep) for everything.
-
----
+# Init Workflow
 
 ## Step 1 — Explore
 
@@ -23,8 +14,10 @@ If no archetype matches, use the Fallback strategy and confirm with the user.
 
 Do not skim. Understand how the system actually works before proposing docs.
 
+**Important:** Use your built-in tools (Read, Glob, Grep) to explore. Do NOT create scanner scripts, shell scripts, or any tooling. vdoc is purely AI-driven — no scripts, no build steps, no infrastructure.
+
 **Phase 3 — Write Exploration Log**
-After exploring, write `.claude/skills/vdoc-config/_exploration_log.md` documenting what you found:
+After exploring, write `vdocs/_exploration_log.md` documenting what you found:
 
 ```markdown
 # Exploration Log
@@ -58,7 +51,7 @@ This log is your working memory. It feeds directly into Step 2 (Plan).
 
 ## Step 2 — Plan
 
-Write `.claude/skills/vdoc-config/_DOCUMENTATION_PLAN.md` to disk AND present it to the user in the same step. The file must be persisted — do not just show it in chat.
+Write `vdocs/_DOCUMENTATION_PLAN.md` to disk AND present it to the user in the same step. The file must be persisted — do not just show it in chat.
 
 Use this format:
 
@@ -82,11 +75,11 @@ After writing the file, present the plan to the user. Actively suggest changes:
 - "I found a websocket system — want that documented separately?"
 - "Any internal/legacy systems I should skip?"
 
-**Wait for user approval before proceeding.**
+Wait for user approval before proceeding.
 
 ## Step 3 — Generate
 
-Read the template from `.claude/skills/vdoc-config/references/doc-template.md` once before starting.
+Read the template from [doc-template.md](./doc-template.md) once before starting.
 
 Then generate docs **one at a time, sequentially**. For each approved doc:
 
@@ -96,20 +89,32 @@ Then generate docs **one at a time, sequentially**. For each approved doc:
 
 Do NOT attempt to generate multiple docs from memory. Each doc is a fresh cycle: read sources → write doc → next.
 
-### Writing Rules
+**Writing rules:**
 
 - **Mermaid diagrams are mandatory** in "How It Works". Show the actual flow — request lifecycle, state transitions, data pipeline. If a flow has more than 7-9 nodes, split into multiple diagrams.
 - **Data Model** must show real entities from the code, not generic placeholders. Use mermaid ER diagrams for relational data, tables for simpler models.
 - **Constraints & Decisions** is the most valuable section. Dig into the code for non-obvious choices: "Uses polling instead of websockets because...", "Auth tokens expire in 15min because...". If you can't find the reason, state the constraint and mark it: `Reason: unknown — verify with team`.
-- **Related Features** must reference other docs by filename and explain the coupling.
+- **Related Features** must reference other docs by filename and explain the coupling: "Changes to the JWT schema will require updates to API_REFERENCE_DOC.md (auth middleware affects all endpoints)."
 - **Configuration** must list actual env vars/secrets from the code, not hypothetical ones.
 - **Error Handling** — trace what happens when things fail. What does the user see? What gets logged? Is there retry logic?
 
 ## Step 4 — Manifest
 
-Create `vdocs/_manifest.json` using the schema in `.claude/skills/vdoc-config/references/manifest-schema.json`.
+Create `vdocs/_manifest.json` using the schema in [manifest-schema.json](./manifest-schema.json).
 
-The `description` field is critical — write it rich enough that you can route any user question to the right doc by matching against descriptions.
+The `description` field is critical — write it rich enough that you can route any user question to the right doc by matching against descriptions. Include specific technology names, patterns, and concepts.
+
+Example:
+
+```json
+{
+  "filepath": "AUTHENTICATION_DOC.md",
+  "title": "Authentication - OAuth2 & JWT",
+  "version": "1.0.0",
+  "description": "OAuth2 flow with Google/GitHub providers, JWT token lifecycle, session management via NextAuth.js, route protection middleware, and role-based access control.",
+  "tags": ["oauth2", "jwt", "session-management", "rbac"]
+}
+```
 
 ## Step 5 — Self-Review
 
@@ -122,10 +127,3 @@ Before finishing, verify:
 - [ ] Every doc's "Related Features" references other doc filenames
 - [ ] Manifest `description` is detailed enough for semantic routing
 - [ ] No doc is just a shallow restatement of file names — each explains WHY and HOW
-
-## Rules
-
-1. **Feature-centric, not file-centric.** One doc per logical feature, not per source file.
-2. **No hallucination.** Only document what exists in code.
-3. **No scripts.** Do NOT create shell scripts, scanners, or build tools. Use Read/Glob/Grep.
-4. **Plan first.** Never generate without user-approved plan.

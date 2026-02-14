@@ -13,13 +13,13 @@ const CWD = process.cwd();
 const PLATFORMS = {
   claude: {
     files: [
-      { src: 'claude/vdoc-init.md', dest: '.claude/skills/vdoc-init/SKILL.md' },
-      { src: 'claude/vdoc-update.md', dest: '.claude/skills/vdoc-update/SKILL.md' },
-      { src: 'claude/vdoc-audit.md', dest: '.claude/skills/vdoc-audit/SKILL.md' },
-      { src: 'claude/vdoc-create.md', dest: '.claude/skills/vdoc-create/SKILL.md' },
-      { src: 'claude/references/exploration-strategies.md', dest: '.claude/skills/vdoc-init/references/exploration-strategies.md' },
-      { src: 'claude/references/doc-template.md', dest: '.claude/skills/vdoc-config/references/doc-template.md' },
-      { src: 'claude/references/manifest-schema.json', dest: '.claude/skills/vdoc-config/references/manifest-schema.json' },
+      { src: 'claude/SKILL.md', dest: '.claude/skills/vdoc/SKILL.md' },
+      { src: 'claude/references/init-workflow.md', dest: '.claude/skills/vdoc/references/init-workflow.md' },
+      { src: 'claude/references/create-workflow.md', dest: '.claude/skills/vdoc/references/create-workflow.md' },
+      { src: 'claude/references/audit-workflow.md', dest: '.claude/skills/vdoc/references/audit-workflow.md' },
+      { src: 'claude/references/exploration-strategies.md', dest: '.claude/skills/vdoc/references/exploration-strategies.md' },
+      { src: 'claude/references/doc-template.md', dest: '.claude/skills/vdoc/references/doc-template.md' },
+      { src: 'claude/references/manifest-schema.json', dest: '.claude/skills/vdoc/references/manifest-schema.json' },
     ],
   },
   cursor: {
